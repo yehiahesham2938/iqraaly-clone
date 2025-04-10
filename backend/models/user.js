@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   email: {  type: String,required: true,unique: true },
   password: { type: String, required: true},
   profile_picture: String,
-  subscription_status: {type: String, enum: ['free', 'premium'],default: 'free'}
+  subscription_status: {type: String, enum: ['free', 'premium','admin'],default: 'free'}
 }, { timestamps: true });
 
 

@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const db = require('./config/db'); 
+const User = require('../backend/models/user');
 
 const app = express();
 app.use(express.json()); 
@@ -10,7 +11,8 @@ app.use(express.json());
 
 //Auth route
 app.use('/api/auth', require('./routes/authRoutes'));
-
+//content route
+app.use('/api/audiobooks', require('./routes/contentRoutes'));
 // mongoose.connect(db.url, db.options)
 //   .then(() => {
 //     console.log(`Connected successfully toDB:`, db.url);
@@ -29,6 +31,21 @@ app.use('/api/auth', require('./routes/authRoutes'));
 mongoose.connect(db.url, db.options)
   .then(() => console.log('db connected'))
   .catch(err => console.error('db connection error:', err));
+
+
+  const createAdmin = async () => {
+    const adminExists = await User.findOne({ email: "admin@iqraaly.com" });
+    if (!adminExists) {
+      await User.create({
+        username: "admin",
+        email: "admin@iqraaly.com",
+        password: "Admin123",
+        subscription_status: "admin"
+      });
+      console.log("Admin user created");
+    }
+  };
+  createAdmin();
 
 
 app.get('/', (request, response) => {
