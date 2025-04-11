@@ -1,0 +1,204 @@
+.player-container {
+  width: 100%;
+  background-color: #1a1a1a;
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-top: 20px;
+}
+
+.player-controls-wrapper {
+  width: 100%;
+}
+
+.player-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.player-control-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.player-control-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.player-control-button.play,
+.player-control-button.pause {
+  font-size: 32px;
+  background-color: #6200ee;
+  padding: 12px;
+}
+
+.player-control-button.play:hover,
+.player-control-button.pause:hover {
+  background-color: #7722ff;
+  transform: scale(1.05);
+}
+
+/* Progress Bar */
+.progress-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+
+.time {
+  font-size: 12px;
+  min-width: 40px;
+}
+
+.progress-bar-wrapper {
+  position: relative;
+  flex-grow: 1;
+  height: 6px;
+}
+
+.progress-bar {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  outline: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0.5;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+.progress-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 6px;
+  background-color: #6200ee;
+  border-radius: 3px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Volume Control */
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.volume-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  width: 80px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+/* Playback Speed Control */
+.playback-speed-control {
+  position: relative;
+}
+
+.speed-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.speed-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.speed-options {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background-color: #282828;
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.speed-option {
+  background: none;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.speed-option:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.speed-option.active {
+  background-color: #6200ee;
+}
+
+.placeholder-cover {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  font-size: 2rem;
+}

@@ -1,0 +1,46 @@
+.audio-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.audio-thumbnail {
+  width: 80px;
+  height: 80px;
+  margin-right: 16px;
+  overflow: hidden;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.audio-details {
+  overflow: hidden;
+}
+
+.audio-title {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.audio-artist {
+  margin: 0;
+  font-size: 14px;
+  color: #b3b3b3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.placeholder-cover {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  font-size: 2rem;
+}
