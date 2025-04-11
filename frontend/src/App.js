@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar.js';
 import Player from './components/Player/player.js';
 import MiniPlayer from './components/MiniPlayer/MiniPlayer.js';
+import AudioInfo from './components/AudioInfo/AudioInfo';
 import { AudioPlayerProvider } from './contexts/AudioPlayerContext';
-import { useAudioPlayer } from './hooks/useAudioPlayer'; // Correct import path
+import { useAudioPlayer } from './hooks/useAudioPlayer';
 import './App.css';
 
 function App() {
@@ -16,6 +17,15 @@ function App() {
         <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
         <div className="container" style={{ paddingTop: '100px', margin: '0 auto', maxWidth: '1200px' }}>
           <h1 className="main-heading">Welcome to Iqraaly Clone</h1>
+          
+          {/* Add AudioInfo component here for testing */}
+          <div style={{ margin: '20px 0', border: '1px solid #ddd', padding: '20px' }}>
+            <h3>AudioInfo Component Test:</h3>
+            <AudioInfo track={{
+              title: "Test Track",
+              author: "Test Artist"
+            }} />
+          </div>
           
           <button 
             onClick={() => setShowFullPlayer(!showFullPlayer)}
@@ -44,7 +54,6 @@ function App() {
     </AudioPlayerProvider>
   );
 }
-
 
 const AudiobookList = () => {
   const { audiobooks, loading, error, loadTrack, currentTrack } = useAudioPlayer();
