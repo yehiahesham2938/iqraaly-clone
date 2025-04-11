@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const db = require('./config/db'); 
 const User = require('../backend/models/user');
+const Audiobook = require('./models/audioBook'); // Import the Audiobook model
 const cors = require('cors');
 
 const app = express();
@@ -47,6 +48,9 @@ mongoose.connect(db.url, db.options)
   };
   createAdmin();
 
+ 
+
+seedAudiobooks();
 
 app.get('/', (request, response) => {
   response.send('Backend is Running');

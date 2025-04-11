@@ -45,7 +45,7 @@ function App() {
   );
 }
 
-// Simple list component to show available audiobooks
+
 const AudiobookList = () => {
   const { audiobooks, loading, error, loadTrack, currentTrack } = useAudioPlayer();
 

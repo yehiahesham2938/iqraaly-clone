@@ -14,7 +14,7 @@ export const AudioPlayerProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const audioRef = useRef(null);
 
-  // Fetch audiobooks from API
+
   useEffect(() => {
     const fetchAudiobooks = async () => {
       setLoading(true);
@@ -38,7 +38,7 @@ export const AudioPlayerProvider = ({ children }) => {
     fetchAudiobooks();
   }, []);
 
-  // Handle play/pause
+
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -52,14 +52,14 @@ export const AudioPlayerProvider = ({ children }) => {
     }
   }, [isPlaying, currentTrack]);
 
-  // Update playback rate when changed
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.playbackRate = playbackRate;
     }
   }, [playbackRate]);
 
-  // Update volume when changed
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
