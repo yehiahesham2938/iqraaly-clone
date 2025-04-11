@@ -49,9 +49,34 @@ mongoose.connect(db.url, db.options)
   createAdmin();
 
  
-
-seedAudiobooks();
-
+  const audioBooksInsertTest = async () => {
+    const audiobooksExist = await Audiobook.find();
+    if (audiobooksExist.length === 0) {
+      const sampleAudiobooks = [
+        {
+          title: 'Audio Test1',
+          author: 'Yehia',
+          file_url: 'https://file-examples.com/storage/fee47d30d267f6756977e34/2017/11/file_example_MP3_2MG.mp3',
+          duration: 120,
+          category: 'Action',
+        },
+        {
+          title: 'Audio Test 2',
+          author: 'Yehia',
+          file_url: 'https://freetestdata.com/wp-content/uploads/2021/09/Free_Test_Data_5MB_MP3.mp3',
+          duration: 300,
+          category: 'Comediy',
+        },
+      ];
+  
+      await Audiobook.insertMany(sampleAudiobooks);
+      console.log('added to the database');
+    } else {
+      console.log('Already db have audiobooks');
+    }
+  };
+  
+  audioBooksInsertTest();
 app.get('/', (request, response) => {
   response.send('Backend is Running');
 });
