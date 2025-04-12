@@ -1,1 +1,0 @@
-# iqraaly-clone
