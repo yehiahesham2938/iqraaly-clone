@@ -5,9 +5,16 @@ import MiniPlayer from './components/MiniPlayer/MiniPlayer.js';
 import AudioInfo from './components/AudioInfo/AudioInfo';
 import { AudioPlayerProvider } from './contexts/AudioPlayerContext';
 import { useAudioPlayer } from './hooks/useAudioPlayer';
+import Login from './pages/login.jsx';
+import Register from './pages/register.jsx';
+import AboutUs from './pages/AboutUs.jsx';
+
+import { useNavigate } from 'react-router-dom';
+
 import './App.css';
 
 function App() {
+  const navigate = useNavigate();
   // Initialize dark mode from localStorage or default to false
   const [darkMode, setDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('darkMode');
@@ -50,20 +57,22 @@ function App() {
               <a href="#" className="navbar-link">الرئيسية</a>
               <a href="#" className="navbar-link">الكتب</a>
               <a href="#" className="navbar-link">التصنيفات</a>
-              <a href="#" className="navbar-link">من نحن</a>
+              <a href="/AboutUs"   onClick={() => navigate('/AboutUs')} className="navbar-link">  من نحن</a>
             </div>
             
             <div className="navbar-actions">
-              <button 
-                className="auth-button login-button"
-              >
-                تسجيل الدخول
-              </button>
-              <button 
-                className="auth-button signup-button"
-              >
-                إنشاء حساب
-              </button>
+            <button
+      className="auth-button login-button"
+      onClick={() => navigate('/login')} 
+    >
+      تسجيل الدخول
+    </button>
+    <button
+      className="btn btn-register"
+      onClick={() => navigate('/register')} 
+    >
+      إنشاء حساب
+    </button>
               <button 
                 className="dark-mode-toggle"
                 onClick={toggleDarkMode}
@@ -87,12 +96,24 @@ function App() {
             <a href="#" className="navbar-link">   الرئيسية </a> 
             <a href="#" className="navbar-link">  الكتب</a>
             <a href="#" className="navbar-link">  التصنيفات</a>
-            <a href="#" className="navbar-link">  من نحن</a>
+            <a href="/AboutUs"   onClick={() => navigate('/AboutUs')} className="navbar-link">  من نحن</a>
+           
             
             <div className="navbar-actions">
-              <button className="auth-button login-button">تسجيل الدخول</button>
-              <button className="auth-button signup-button">إنشاء حساب</button>
-            </div>
+            <button
+      className="auth-button login-button"
+      onClick={() => navigate('/login')} 
+    >
+      تسجيل الدخول
+    </button>
+    <button
+      className="auth-button btn-registe"   
+      onClick={() => navigate('/register')} 
+    >
+      إنشاء حساب
+    </button>
+             
+            </div> 
           </div>
         </nav>
         

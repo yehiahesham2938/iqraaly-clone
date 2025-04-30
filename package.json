@@ -84,6 +84,7 @@
     "is-promise": "^4.0.0",
     "jake": "^10.9.2",
     "kareem": "^2.6.3",
+    "lucide-react": "^0.503.0",
     "make-dir": "^3.1.0",
     "math-intrinsics": "^1.1.0",
     "media-typer": "^1.1.0",
@@ -186,9 +187,10 @@
     "url": "https://github.com/yehiahesham2938/iqraaly-clone/issues"
   },
   "homepage": "https://github.com/yehiahesham2938/iqraaly-clone#readme",
-  "description": "",
   "devDependencies": {
     "dotenv": "^16.5.0",
     "nodemon": "^3.1.9"
-  }
+  },
+  "keywords": [],
+  "description": ""
 }
