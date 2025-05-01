@@ -3,7 +3,7 @@ import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import './Player.css';
 
 const PlaybackSpeedControl = () => {
-  const { playbackRate, handlePlaybackRateChange } = useAudioPlayer();
+  const { playbackrate, handlePlaybackRateChange } = useAudioPlayer();
   const [isSpeedMenuOpen, setIsSpeedMenuOpen] = useState(false);
 
   const speedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -19,19 +19,16 @@ const PlaybackSpeedControl = () => {
 
   return (
     <div className="playback-speed-control">
-      <button 
-        className="speed-button" 
-        onClick={toggleSpeedMenu}
-      >
-        {playbackRate}x
+      <button className="speed-button" onClick={toggleSpeedMenu}>
+        {playbackrate}x
       </button>
-      
+
       {isSpeedMenuOpen && (
         <div className="speed-options">
           {speedOptions.map((speed) => (
             <button
               key={speed}
-              className={`speed-option ${speed === playbackRate ? 'active' : ''}`}
+              className={`speed-option ${speed === playbackrate ? 'active' : ''}`}
               onClick={() => changeSpeed(speed)}
             >
               {speed}x

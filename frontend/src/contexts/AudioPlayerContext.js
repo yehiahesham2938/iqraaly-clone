@@ -14,14 +14,13 @@ export const AudioPlayerProvider = ({ children }) => {
   const [error, seterror] = useState(null);
   const audioRef = useRef(null);
 
-
   useEffect(() => {
-    const fetchAudiobooks = async () => {
+    const fetchAudiobooks = async () => {  
       setloading(true);
       try {
         const response = await fetch('http://localhost:5000/api/audiobooks');
         if (!response.ok) {
-          throw new Error('faled to fetch audiobooks');
+          throw new Error('Failed to fetch audiobooks');
         }
         const data = await response.json();
         if (data.success) {
@@ -29,7 +28,7 @@ export const AudioPlayerProvider = ({ children }) => {
         }
       } catch (err) {
         seterror(err.message);
-        console.error('error fetching audiobooks:', err);
+        console.error('Error fetching audiobooks:', err);
       } finally {
         setloading(false);
       }
@@ -37,7 +36,6 @@ export const AudioPlayerProvider = ({ children }) => {
 
     fetchAudiobooks();
   }, []);
-
 
   useEffect(() => {
     if (audioRef.current) {
@@ -52,13 +50,11 @@ export const AudioPlayerProvider = ({ children }) => {
     }
   }, [isplaying, currenttrack]);
 
-
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.playbackrate = playbackrate;
+      audioRef.current.playbackRate = playbackrate;
     }
   }, [playbackrate]);
-
 
   useEffect(() => {
     if (audioRef.current) {
@@ -82,13 +78,13 @@ export const AudioPlayerProvider = ({ children }) => {
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
-      setcurrenttime(audioRef.current.currenttime);
+      setcurrenttime(audioRef.current.currentTime);
     }
   };
 
   const handleSeek = (value) => {
     if (audioRef.current) {
-      audioRef.current.currenttime = value;
+      audioRef.current.currentTime = value;
       setcurrenttime(value);
     }
   };
@@ -100,7 +96,7 @@ export const AudioPlayerProvider = ({ children }) => {
     }
   };
 
-  const handleplaybackrateChange = (rate) => {
+  const handlePlaybackRateChange = (rate) => {
     setplaybackrate(rate);
   };
 
@@ -127,7 +123,7 @@ export const AudioPlayerProvider = ({ children }) => {
         handlePause,
         handleSeek,
         handleVolumeChange,
-        handleplaybackrateChange,
+        handlePlaybackRateChange,
         loadTrack,
         handleLoadedMetadata,
         handleTimeUpdate

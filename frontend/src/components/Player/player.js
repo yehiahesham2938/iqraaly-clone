@@ -4,7 +4,6 @@ import PlayerControls from './PlayerControls';
 import ProgressBar from './ProgressBar';
 import VolumeControl from './VolumeControl';
 import PlaybackSpeedControl from './PlaybackSpeedControl';
-import AudioInfo from '../AudioInfo/AudioInfo'; 
 import './Player.css';
 
 const Player = () => {
@@ -48,17 +47,21 @@ const Player = () => {
   return (
     <div className={`player-container ${isPlaying ? 'is-playing' : ''}`}>
       <div className="player-info-section">
-        <AudioInfo track={currentTrack} />
+        <div className="player-track-info">
+          <img src={currentTrack.cover_url} alt={currentTrack.title} />
+          <div>
+            <h4>{currentTrack.title}</h4>
+            <p>{currentTrack.author}</p>
+          </div>
+        </div>
       </div>
       
       <div className="player-controls-wrapper">
         <ProgressBar />
-        <div className="player-controls-group">
-          <PlayerControls />
-          <div className="secondary-controls-group">
-            <VolumeControl />
-            <PlaybackSpeedControl />
-          </div>
+        <PlayerControls />
+        <div className="secondary-controls-group">
+          <VolumeControl />
+          <PlaybackSpeedControl />
         </div>
       </div>
     </div>

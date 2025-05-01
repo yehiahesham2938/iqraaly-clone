@@ -4,14 +4,10 @@ import { formatTime } from '../../utils/formatTime';
 import './Player.css';
 
 const ProgressBar = () => {
-  const { 
-    currentTime, 
-    duration, 
-    handleSeek 
-  } = useAudioPlayer();
-  
+  const { currentTime, duration, handleSeek } = useAudioPlayer();
+
   const progress = (currentTime / duration) * 100 || 0;
-  
+
   const handleChange = (e) => {
     const value = parseFloat(e.target.value);
     handleSeek(value);
@@ -30,8 +26,8 @@ const ProgressBar = () => {
           className="progress-bar"
           onChange={handleChange}
         />
-        <div 
-          className="progress-bar-fill" 
+        <div
+          className="progress-bar-fill"
           style={{ width: `${progress}%` }}
         ></div>
       </div>
