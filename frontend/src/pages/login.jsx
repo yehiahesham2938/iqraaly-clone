@@ -6,11 +6,39 @@ function Login() {
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    console.log('Login submitted:', { email, password });
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      // Store the token in localStorage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // Redirect to home page or dashboard
+      window.location.href = '/';
+    } catch (error) {
+      setErrorMessage(error.message || 'Invalid email or password');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -26,7 +54,9 @@ function Login() {
         </div>
 
         {errorMessage && (
-          <div className="alert alert-error">{errorMessage}</div>
+          <div className="alert alert-error">
+            <i className="fas fa-exclamation-circle"></i> {errorMessage}
+          </div>
         )}
 
         <form onSubmit={handleSubmit}>
@@ -67,7 +97,13 @@ function Login() {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-login">Login</button>
+          <button 
+            type="submit" 
+            className="btn btn-login"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
 
         <div className="auth-footer">

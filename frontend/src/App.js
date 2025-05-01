@@ -7,14 +7,17 @@ import { AudioPlayerProvider } from './contexts/AudioPlayerContext';
 import { useAudioPlayer } from './hooks/useAudioPlayer';
 import Login from './pages/login.jsx';
 import Register from './pages/register.jsx';
+import Profile from './pages/profile.jsx';
 import AboutUs from './pages/AboutUs.jsx';
-
 import { useNavigate } from 'react-router-dom';
 
 import './App.css';
 
 function App() {
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+
   // Initialize dark mode from localStorage or default to false
   const [darkMode, setDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('darkMode');
@@ -22,6 +25,16 @@ function App() {
   });
   const [showFullPlayer, setShowFullPlayer] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    if (token && userData) {
+      setIsAuthenticated(true);
+      setUser(JSON.parse(userData));
+    }
+  }, []);
 
   // Update localStorage and body class when dark mode changes
   useEffect(() => {
@@ -43,6 +56,14 @@ function App() {
     setShowMobileMenu(!showMobileMenu);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    setUser(null);
+    navigate('/');
+  };
+
   return (
     <AudioPlayerProvider>
       <div dir="rtl" className={`app ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -57,22 +78,41 @@ function App() {
               <a href="#" className="navbar-link">الرئيسية</a>
               <a href="#" className="navbar-link">الكتب</a>
               <a href="#" className="navbar-link">التصنيفات</a>
-              <a href="/AboutUs"   onClick={() => navigate('/AboutUs')} className="navbar-link">  من نحن</a>
+              <a href="/AboutUs" onClick={() => navigate('/AboutUs')} className="navbar-link">من نحن</a>
             </div>
             
             <div className="navbar-actions">
-            <button
-      className="auth-button login-button"
-      onClick={() => navigate('/login')} 
-    >
-      تسجيل الدخول
-    </button>
-    <button
-      className="btn btn-register"
-      onClick={() => navigate('/register')} 
-    >
-      إنشاء حساب
-    </button>
+              {isAuthenticated ? (
+                <>
+                  <button
+                    className="auth-button profile-button"
+                    onClick={() => navigate('/profile')}
+                  >
+                    {user?.username}
+                  </button>
+                  <button
+                    className="auth-button logout-button"
+                    onClick={handleLogout}
+                  >
+                    تسجيل الخروج
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="auth-button login-button"
+                    onClick={() => navigate('/login')}
+                  >
+                    تسجيل الدخول
+                  </button>
+                  <button
+                    className="btn btn-register"
+                    onClick={() => navigate('/register')}
+                  >
+                    إنشاء حساب
+                  </button>
+                </>
+              )}
               <button 
                 className="dark-mode-toggle"
                 onClick={toggleDarkMode}
@@ -91,29 +131,45 @@ function App() {
             </div>
           </div>
           
-          {/* Mobile Menu */}
           <div className={`navbar-mobile-menu ${showMobileMenu ? 'open' : ''}`}>
-            <a href="#" className="navbar-link">   الرئيسية </a> 
-            <a href="#" className="navbar-link">  الكتب</a>
-            <a href="#" className="navbar-link">  التصنيفات</a>
-            <a href="/AboutUs"   onClick={() => navigate('/AboutUs')} className="navbar-link">  من نحن</a>
-           
+            <a href="#" className="navbar-link">الرئيسية</a>
+            <a href="#" className="navbar-link">الكتب</a>
+            <a href="#" className="navbar-link">التصنيفات</a>
+            <a href="/AboutUs" onClick={() => navigate('/AboutUs')} className="navbar-link">من نحن</a>
             
             <div className="navbar-actions">
-            <button
-      className="auth-button login-button"
-      onClick={() => navigate('/login')} 
-    >
-      تسجيل الدخول
-    </button>
-    <button
-      className="auth-button btn-registe"   
-      onClick={() => navigate('/register')} 
-    >
-      إنشاء حساب
-    </button>
-             
-            </div> 
+              {isAuthenticated ? (
+                <>
+                  <button
+                    className="auth-button profile-button"
+                    onClick={() => navigate('/profile')}
+                  >
+                    {user?.username}
+                  </button>
+                  <button
+                    className="auth-button logout-button"
+                    onClick={handleLogout}
+                  >
+                    تسجيل الخروج
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="auth-button login-button"
+                    onClick={() => navigate('/login')}
+                  >
+                    تسجيل الدخول
+                  </button>
+                  <button
+                    className="auth-button btn-register"
+                    onClick={() => navigate('/register')}
+                  >
+                    إنشاء حساب
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </nav>
         

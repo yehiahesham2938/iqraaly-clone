@@ -4,6 +4,12 @@ import './register.css';
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
@@ -12,6 +18,18 @@ const Register = () => {
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPasswordStrength(calculateStrength(value));
+    setFormData(prev => ({
+      ...prev,
+      password: value
+    }));
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const calculateStrength = (password) => {
@@ -30,6 +48,32 @@ const Register = () => {
     return '#2a9d8f';
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      // Handle successful registration
+      console.log('Registration successful:', data);
+      // You can redirect to login page or show success message
+      window.location.href = '/login';
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-header">
@@ -37,15 +81,37 @@ const Register = () => {
         <p className="auth-subtitle">Join our community today</p>
       </div>
 
-      <form action="/register" method="POST">
+      {errorMessage && (
+        <div className="alert alert-error">{errorMessage}</div>
+      )}
+
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name" className="form-label">Full Name</label>
-          <input type="text" id="name" name="name" className="form-input" placeholder="Enter your full name" required />
+          <label htmlFor="username" className="form-label">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            className="form-input"
+            placeholder="Enter your username"
+            value={formData.username}
+            onChange={handleInputChange}
+            required
+          />
         </div>
 
         <div className="form-group">
           <label htmlFor="email" className="form-label">Email Address</label>
-          <input type="email" id="email" name="email" className="form-input" placeholder="Enter your email" required />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            className="form-input"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
         </div>
 
         <div className="form-group">
@@ -57,6 +123,7 @@ const Register = () => {
               name="password"
               className="form-input"
               placeholder="Create a password"
+              value={formData.password}
               onChange={handlePasswordChange}
               required
             />
