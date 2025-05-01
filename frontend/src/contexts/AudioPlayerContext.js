@@ -12,7 +12,17 @@ export const AudioPlayerProvider = ({ children }) => {
   const [audiobooks, setaudiobooks] = useState([]);
   const [loading, setloading] = useState(false);
   const [error, seterror] = useState(null);
+  const [isBuffering, setIsBuffering] = useState(false);
+  const [bufferProgress, setBufferProgress] = useState(0);
+  const [offlineTracks, setOfflineTracks] = useState(() => {
+    const saved = localStorage.getItem('offlineTracks');
+    return saved ? JSON.parse(saved) : [];
+  });
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    localStorage.setItem('offlineTracks', JSON.stringify(offlineTracks));
+  }, [offlineTracks]);
 
   useEffect(() => {
     const fetchAudiobooks = async () => {  
@@ -39,11 +49,55 @@ export const AudioPlayerProvider = ({ children }) => {
 
   useEffect(() => {
     if (audioRef.current) {
+      const audio = audioRef.current;
+
+      const handleWaiting = () => {
+        setIsBuffering(true);
+      };
+
+      const handleCanPlay = () => {
+        setIsBuffering(false);
+      };
+
+      const handleProgress = () => {
+        if (audio.buffered.length > 0) {
+          const bufferedEnd = audio.buffered.end(audio.buffered.length - 1);
+          const duration = audio.duration || 1;
+          const progress = (bufferedEnd / duration) * 100;
+          setBufferProgress(progress);
+        }
+      };
+
+      const handleError = (e) => {
+        console.error('Audio error:', e);
+        seterror('Error playing audio. Please try again.');
+        setisplaying(false);
+      };
+
+      audio.addEventListener('waiting', handleWaiting);
+      audio.addEventListener('canplay', handleCanPlay);
+      audio.addEventListener('progress', handleProgress);
+      audio.addEventListener('error', handleError);
+
+      return () => {
+        audio.removeEventListener('waiting', handleWaiting);
+        audio.removeEventListener('canplay', handleCanPlay);
+        audio.removeEventListener('progress', handleProgress);
+        audio.removeEventListener('error', handleError);
+      };
+    }
+  }, [currenttrack]);
+
+  useEffect(() => {
+    if (audioRef.current) {
       if (isplaying) {
-        audioRef.current.play().catch(err => {
-          console.error('Error playing audio:', err);
-          setisplaying(false);
-        });
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.error('Error playing audio:', err);
+            setisplaying(false);
+          });
+        }
       } else {
         audioRef.current.pause();
       }
@@ -90,10 +144,7 @@ export const AudioPlayerProvider = ({ children }) => {
   };
 
   const handleVolumeChange = (value) => {
-    if (audioRef.current) {
-      audioRef.current.volume = value;
-      setvolume(value);
-    }
+    setvolume(value);
   };
 
   const handlePlaybackRateChange = (rate) => {
@@ -101,9 +152,15 @@ export const AudioPlayerProvider = ({ children }) => {
   };
 
   const loadTrack = (track) => {
+    // Check if the track is available offline
+    const offlineTrack = offlineTracks.find(t => t._id === track._id);
+    if (offlineTrack && offlineTrack.offlineUrl) {
+      track.file_url = offlineTrack.offlineUrl;
+    }
     setcurrenttrack(track);
     setisplaying(true);
     setcurrenttime(0);
+    seterror(null);
   };
 
   return (
@@ -118,6 +175,9 @@ export const AudioPlayerProvider = ({ children }) => {
         audiobooks,
         loading,
         error,
+        isBuffering,
+        bufferProgress,
+        offlineTracks,
         audioRef,
         handlePlay,
         handlePause,
@@ -134,6 +194,7 @@ export const AudioPlayerProvider = ({ children }) => {
         <audio
           ref={audioRef}
           src={currenttrack.file_url}
+          preload="auto"
           onLoadedMetadata={handleLoadedMetadata}
           onTimeUpdate={handleTimeUpdate}
           onEnded={() => setisplaying(false)}

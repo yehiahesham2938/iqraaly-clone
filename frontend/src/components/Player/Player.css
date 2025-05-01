@@ -39,3 +39,64 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+.offline-mode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.offline-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.offline-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.offline-button.download {
+  color: #4CAF50;
+}
+
+.offline-button.remove {
+  color: #f44336;
+}
+
+.download-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 100px;
+}
+
+.download-progress .progress-bar {
+  flex: 1;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.download-progress .progress-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  transition: width 0.3s ease;
+}
+
+.download-progress span {
+  font-size: 12px;
+  color: #b3b3b3;
+  min-width: 40px;
+  text-align: right;
+}

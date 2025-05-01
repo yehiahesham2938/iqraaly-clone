@@ -22,12 +22,21 @@
   height: 100%;
   opacity: 0;
   cursor: pointer;
-  z-index: 2;
+  z-index: 3;
 }
 
 .mini-player-progress-fill {
   height: 100%;
   background-color: #6200ee;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.mini-player-buffer-fill {
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
   position: absolute;
   top: 0;
   left: 0;
@@ -110,11 +119,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
 }
 
 .mini-player-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
 }
 
 .mini-player-time {
@@ -122,6 +132,30 @@
   color: #b3b3b3;
   min-width: 100px;
   text-align: center;
+}
+
+/* Buffering styles */
+.buffering-indicator {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buffering-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Volume and Speed controls */

@@ -62,6 +62,62 @@
   text-overflow: ellipsis;
 }
 
+/* Actions styles */
+.audio-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.audio-play-button {
+  background: #6200ee;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.audio-play-button:hover {
+  background: #7c4dff;
+}
+
+/* Offline mode styles */
+.offline-mode {
+  display: flex;
+  align-items: center;
+}
+
+.offline-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.offline-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.offline-button.download {
+  color: #4CAF50;
+}
+
+.offline-button.remove {
+  color: #f44336;
+}
+
 /* Empty state */
 .audio-info-empty {
   padding: 12px;

@@ -1,8 +1,15 @@
 import React from 'react';
+import { useAudioPlayer } from '../../hooks/useAudioPlayer';
+import OfflineMode from '../Player/OfflineMode';
 import './AudioInfo.css';
 
 const AudioInfo = ({ track }) => {
-  if (!track) {
+  const { loadTrack, currenttrack } = useAudioPlayer();
+
+  // Use the current track if available, otherwise use the passed track
+  const displayTrack = currenttrack || track;
+
+  if (!displayTrack) {
     return (
       <div className="audio-info-empty">
         <p>No track selected</p>
@@ -13,17 +20,26 @@ const AudioInfo = ({ track }) => {
   return (
     <div className="audio-info">
       <div className="audio-thumbnail">
-        {track.cover ? (
-          <img src={track.cover} alt="Track cover" className="audio-cover" />
+        {displayTrack.cover_url ? (
+          <img src={displayTrack.cover_url} alt="Track cover" className="audio-cover" />
         ) : (
           <div className="placeholder-cover">
-            {track.title ? track.title.charAt(0).toUpperCase() : '🎵'}
+            {displayTrack.title ? displayTrack.title.charAt(0).toUpperCase() : '🎵'}
           </div>
         )}
       </div>
       <div className="audio-details">
-        <h3 className="audio-title">{track.title || 'Untitled Track'}</h3>
-        <p className="audio-artist">{track.author || 'Unknown Artist'}</p>
+        <h3 className="audio-title">{displayTrack.title || 'Untitled Track'}</h3>
+        <p className="audio-artist">{displayTrack.author || 'Unknown Artist'}</p>
+      </div>
+      <div className="audio-actions">
+        <button 
+          className="audio-play-button"
+          onClick={() => loadTrack(displayTrack)}
+        >
+          Play
+        </button>
+        <OfflineMode />
       </div>
     </div>
   );

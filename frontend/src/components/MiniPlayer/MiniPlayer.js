@@ -3,6 +3,7 @@ import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import { formatTime } from '../../utils/formatTime';
 import VolumeControl from '../Player/VolumeControl';
 import PlaybackSpeedControl from '../Player/PlaybackSpeedControl';
+import OfflineMode from '../Player/OfflineMode';
 import './MiniPlayer.css';
 
 const MiniPlayer = () => {
@@ -13,7 +14,9 @@ const MiniPlayer = () => {
     handlePause, 
     currenttime, 
     duration,
-    handleSeek
+    handleSeek,
+    isBuffering,
+    bufferProgress
   } = useAudioPlayer();
 
   if (!currenttrack) {
@@ -43,6 +46,10 @@ const MiniPlayer = () => {
           className="mini-player-progress-fill" 
           style={{ width: `${progress}%` }}
         ></div>
+        <div 
+          className="mini-player-buffer-fill" 
+          style={{ width: `${bufferProgress}%` }}
+        ></div>
       </div>
       
       <div className="mini-player-content">
@@ -58,9 +65,15 @@ const MiniPlayer = () => {
         
         <div className="mini-player-controls">
           <div className="mini-player-main-controls">
-            <button className="mini-player-button" onClick={handlePause}>
-              {isplaying ? '⏸' : '▶️'}
-            </button>
+            {isBuffering ? (
+              <div className="buffering-indicator">
+                <div className="buffering-spinner"></div>
+              </div>
+            ) : (
+              <button className="mini-player-button" onClick={handlePause}>
+                {isplaying ? '⏸' : '▶️'}
+              </button>
+            )}
             <div className="mini-player-time">
               {formatTime(currenttime)} / {formatTime(duration)}
             </div>
@@ -69,6 +82,7 @@ const MiniPlayer = () => {
           <div className="mini-player-secondary-controls">
             <VolumeControl />
             <PlaybackSpeedControl />
+            <OfflineMode />
           </div>
         </div>
       </div>
