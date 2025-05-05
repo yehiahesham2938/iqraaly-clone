@@ -119,7 +119,11 @@ function App() {
                 aria-label={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
                 title={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
               >
-                {darkMode ? <i className="fas fa-sun"></i> : <i className="fas fa-moon"></i>}
+                {darkMode ? (
+                  <i className="fas fa-sun"></i> // Sun icon for light mode
+                ) : (
+                  <i className="fas fa-moon"></i> // Moon icon for dark mode
+                )}
               </button>
               <button 
                 className="navbar-mobile-toggle"
@@ -132,10 +136,10 @@ function App() {
           </div>
           
           <div className={`navbar-mobile-menu ${showMobileMenu ? 'open' : ''}`}>
-            <a href="#" className="navbar-link">الرئيسية</a>
-            <a href="#" className="navbar-link">الكتب</a>
-            <a href="#" className="navbar-link">التصنيفات</a>
-            <a href="/AboutUs" onClick={() => navigate('/AboutUs')} className="navbar-link">من نحن</a>
+            <a href="#" className="navbar-link">  الرئيسية</a>
+            <a href="#" className="navbar-link">  الكتب</a>
+            <a href="#" className="navbar-link">  التصنيفات</a>
+            <a href="/AboutUs" onClick={() => navigate('/AboutUs')} className="navbar-link">  من نحن</a>
             
             <div className="navbar-actions">
               {isAuthenticated ? (
