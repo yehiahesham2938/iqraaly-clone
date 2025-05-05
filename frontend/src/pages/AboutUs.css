@@ -1,0 +1,338 @@
+.app {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.app.dark-mode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.app.dark-mode .navbar {
+  background-color: #2c2c2c;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand .navbar-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.navbar-link {
+  color: #2c3e50;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.app.dark-mode .navbar-link {
+  color: #ffffff;
+}
+
+.navbar-link:hover,
+.navbar-link.active {
+  color: #007bff;
+}
+
+.navbar-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.auth-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.login-button {
+  background-color: transparent;
+  color: #007bff;
+}
+
+.btn-register {
+  background-color: #007bff;
+  color: white;
+}
+
+.dark-mode-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.app.dark-mode .dark-mode-toggle {
+  color: #ffffff;
+}
+
+.navbar-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+.app.dark-mode .navbar-mobile-toggle {
+  color: #ffffff;
+}
+
+.navbar-mobile-menu {
+  display: none;
+}
+
+/* About Us Styles */
+.about-us-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  direction: rtl;
+}
+
+.about-hero {
+  text-align: center;
+  padding: 4rem 0;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  border-radius: 1rem;
+  margin-bottom: 3rem;
+}
+
+.app.dark-mode .about-hero {
+  background: linear-gradient(to right, #2c2c2c, #1a1a1a);
+}
+
+.about-hero h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.app.dark-mode .about-hero h1 {
+  color: #ffffff;
+}
+
+.about-hero h2 {
+  font-size: 1.5rem;
+  color: #6c757d;
+}
+
+.app.dark-mode .about-hero h2 {
+  color: #a0a0a0;
+}
+
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.mission-section,
+.team-section,
+.publish-section {
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.app.dark-mode .mission-section,
+.app.dark-mode .team-section,
+.app.dark-mode .publish-section {
+  background: #2c2c2c;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mission-section h3,
+.team-section h3,
+.publish-section h3 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.app.dark-mode .mission-section h3,
+.app.dark-mode .team-section h3,
+.app.dark-mode .publish-section h3 {
+  color: #ffffff;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.team-member {
+  text-align: center;
+  padding: 1rem;
+}
+
+.member-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  margin: 0 auto 1rem;
+}
+
+.app.dark-mode .member-image {
+  background-color: #3c3c3c;
+}
+
+.team-member h4 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.app.dark-mode .team-member h4 {
+  color: #ffffff;
+}
+
+.team-member p {
+  color: #6c757d;
+}
+
+.app.dark-mode .team-member p {
+  color: #a0a0a0;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form input {
+  padding: 0.8rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #2c3e50;
+}
+
+.app.dark-mode .contact-form input {
+  background-color: #3c3c3c;
+  border-color: #4c4c4c;
+  color: #ffffff;
+}
+
+.contact-form button {
+  padding: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact-form button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-mobile-toggle {
+    display: block;
+  }
+
+  .navbar-mobile-menu {
+    display: block;
+    position: fixed;
+    top: 70px;
+    right: 0;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .app.dark-mode .navbar-mobile-menu {
+    background-color: #2c2c2c;
+  }
+
+  .navbar-mobile-menu.open {
+    transform: translateX(0);
+  }
+
+  .navbar-mobile-menu .navbar-link {
+    display: block;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .app.dark-mode .navbar-mobile-menu .navbar-link {
+    border-bottom-color: #4c4c4c;
+  }
+
+  .navbar-mobile-menu .navbar-actions {
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+
+  .about-us-container {
+    padding: 1rem;
+  }
+
+  .about-hero {
+    padding: 2rem 0;
+  }
+
+  .about-hero h1 {
+    font-size: 2rem;
+  }
+
+  .about-hero h2 {
+    font-size: 1.2rem;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+} 

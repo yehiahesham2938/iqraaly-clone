@@ -1,80 +1,164 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = ({ darkMode, setDarkMode }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState('Home');
-  const [scrolled, setScrolled] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleLinkClick = (link) => {
-    setActiveLink(link);
-    if (window.innerWidth <= 768) {
-      setIsOpen(false);
-    }
-  };
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    if (token && userData) {
+      setIsAuthenticated(true);
+      setUser(JSON.parse(userData));
+    }
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(prevMode => !prevMode);
+  };
+
+  const toggleMobileMenu = () => {
+    setShowMobileMenu(!showMobileMenu);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    setUser(null);
+    navigate('/');
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path ? 'active' : '';
+  };
+
   return (
-    <nav className={`Navbar ${scrolled ? 'scrolled' : ''} ${darkMode ? 'dark' : ''}`}>
+    <nav className="navbar">
       <div className="navbar-container">
-        <h2 className="logo">Iqraaly</h2>
-        
-        <div className={`hamburger ${isOpen ? 'open' : ''}`} onClick={toggleMenu}>
-          <span></span>
-          <span></span>
-          <span></span>
+        <div className="navbar-brand">
+          <Link to="/" className="navbar-logo">اقرألي</Link>
         </div>
         
-        <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
-          <li>
-            <a 
-              href="#" 
-              className={activeLink === 'Home' ? 'active' : ''}
-              onClick={() => handleLinkClick('Home')}
-            >
-              Home
-            </a>
-          </li>
-          <li>
-            <a 
-              href="#" 
-              className={activeLink === 'Library' ? 'active' : ''}
-              onClick={() => handleLinkClick('Library')}
-            >
-              Library
-            </a>
-          </li>
-          <li>
-            <a 
-              href="#" 
-              className={activeLink === 'About' ? 'active' : ''}
-              onClick={() => handleLinkClick('About')}
-            >
-              About
-            </a>
-          </li>
-          <li>
-            <button className="dark-mode-toggle" onClick={toggleDarkMode}>
-              {darkMode ? '☀️' : '🌙'}
-            </button>
-          </li>
-        </ul>
+        <div className="navbar-links">
+          <Link to="/" className={`navbar-link ${isActive('/')}`}>الرئيسية</Link>
+          <Link to="/books" className={`navbar-link ${isActive('/books')}`}>الكتب</Link>
+          <Link to="/categories" className={`navbar-link ${isActive('/categories')}`}>التصنيفات</Link>
+          <Link to="/about" className={`navbar-link ${isActive('/about')}`}>من نحن</Link>
+        </div>
+        
+        <div className="navbar-actions">
+          {isAuthenticated ? (
+            <>
+              <button
+                className="auth-button profile-button"
+                onClick={() => navigate('/profile')}
+              >
+                {user?.username}
+              </button>
+              <button
+                className="auth-button logout-button"
+                onClick={handleLogout}
+              >
+                تسجيل الخروج
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="auth-button login-button"
+                onClick={() => navigate('/login')}
+              >
+                تسجيل الدخول
+              </button>
+              <button
+                className="btn btn-register"
+                onClick={() => navigate('/register')}
+              >
+                إنشاء حساب
+              </button>
+            </>
+          )}
+          <button 
+            className="dark-mode-toggle"
+            onClick={toggleDarkMode}
+            aria-label={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
+            title={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
+          >
+            {darkMode ? (
+              <i className="fas fa-sun"></i>
+            ) : (
+              <i className="fas fa-moon"></i>
+            )}
+          </button>
+          <button 
+            className="navbar-mobile-toggle"
+            onClick={toggleMobileMenu}
+            aria-label={showMobileMenu ? "إغلاق القائمة" : "فتح القائمة"}
+          >
+            <i className={showMobileMenu ? "fas fa-times" : "fas fa-bars"}></i>
+          </button>
+        </div>
+      </div>
+      
+      <div className={`navbar-mobile-menu ${showMobileMenu ? 'open' : ''}`}>
+        <Link to="/" className={`navbar-link ${isActive('/')}`}>الرئيسية</Link>
+        <Link to="/books" className={`navbar-link ${isActive('/books')}`}>الكتب</Link>
+        <Link to="/categories" className={`navbar-link ${isActive('/categories')}`}>التصنيفات</Link>
+        <Link to="/about" className={`navbar-link ${isActive('/about')}`}>من نحن</Link>
+        
+        <div className="navbar-actions">
+          {isAuthenticated ? (
+            <>
+              <button
+                className="auth-button profile-button"
+                onClick={() => navigate('/profile')}
+              >
+                {user?.username}
+              </button>
+              <button
+                className="auth-button logout-button"
+                onClick={handleLogout}
+              >
+                تسجيل الخروج
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="auth-button login-button"
+                onClick={() => navigate('/login')}
+              >
+                تسجيل الدخول
+              </button>
+              <button
+                className="auth-button btn-register"
+                onClick={() => navigate('/register')}
+              >
+                إنشاء حساب
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

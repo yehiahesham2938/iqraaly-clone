@@ -9,7 +9,7 @@ import Login from './pages/login.jsx';
 import Register from './pages/register.jsx';
 import Profile from './pages/profile.jsx';
 import AboutUs from './pages/AboutUs.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import './App.css';
 
@@ -71,14 +71,14 @@ function App() {
         <nav className="navbar">
           <div className="navbar-container">
             <div className="navbar-brand">
-              <a href="#" className="navbar-logo">اقرألي</a>
+              <Link to="/" className="navbar-logo">اقرألي</Link>
             </div>
             
             <div className="navbar-links">
-              <a href="#" className="navbar-link">الرئيسية</a>
-              <a href="#" className="navbar-link">الكتب</a>
-              <a href="#" className="navbar-link">التصنيفات</a>
-              <a href="/AboutUs" onClick={() => navigate('/AboutUs')} className="navbar-link">من نحن</a>
+              <Link to="/" className="navbar-link">الرئيسية</Link>
+              <Link to="/books" className="navbar-link">الكتب</Link>
+              <Link to="/categories" className="navbar-link">التصنيفات</Link>
+              <Link to="/about" className="navbar-link">من نحن</Link>
             </div>
             
             <div className="navbar-actions">
@@ -136,10 +136,10 @@ function App() {
           </div>
           
           <div className={`navbar-mobile-menu ${showMobileMenu ? 'open' : ''}`}>
-            <a href="#" className="navbar-link">  الرئيسية</a>
-            <a href="#" className="navbar-link">  الكتب</a>
-            <a href="#" className="navbar-link">  التصنيفات</a>
-            <a href="/AboutUs" onClick={() => navigate('/AboutUs')} className="navbar-link">  من نحن</a>
+            <Link to="/" className="navbar-link">الرئيسية</Link>
+            <Link to="/books" className="navbar-link">الكتب</Link>
+            <Link to="/categories" className="navbar-link">التصنيفات</Link>
+            <Link to="/about" className="navbar-link">من نحن</Link>
             
             <div className="navbar-actions">
               {isAuthenticated ? (
