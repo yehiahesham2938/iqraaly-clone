@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { getImageUrl, handleImageError } from '../utils/imageUtils';
+import BookReview from '../components/BookReview';
 import './Books.css';
 
 const Books = () => {
@@ -11,50 +13,66 @@ const Books = () => {
     return savedMode ? JSON.parse(savedMode) : false;
   });
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [bookmarks, setBookmarks] = useState(() => {
+    const savedBookmarks = localStorage.getItem('bookmarks');
+    return savedBookmarks ? JSON.parse(savedBookmarks) : [];
+  });
+  const [mostListenedBooks, setMostListenedBooks] = useState([]);
+  const [newReleases, setNewReleases] = useState([]);
 
   // Sample data - Replace with your actual data from API
-  const mostListenedBooks = [
+  const sampleMostListenedBooks = [
     {
       id: 1,
       title: 'هاتف وثلاث جثث - الكتاب الأول',
       author: 'يارا رضوان',
-      cover: '/book-covers/book1.jpg'
+      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3065_1743036919.jpg',
+      rating: 4.5,
+      reviews: 128
     },
     {
       id: 2,
       title: 'جنينة المحروقي',
       author: 'يحيى صفوت',
-      cover: '/book-covers/book2.jpg'
+      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3073_1743298285.jpg',
+      rating: 4.2,
+      reviews: 95
     },
     {
       id: 3,
       title: 'أوراق شمعون المصري',
       author: 'أسامة عبد الرؤف الشاذلي',
-      cover: '/book-covers/book3.jpg'
-    },
-    // Add more books as needed
+      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3002_1738774473.jpg',
+      rating: 4.8,
+      reviews: 156
+    }
   ];
 
-  const newReleases = [
+  const sampleNewReleases = [
     {
       id: 1,
       title: 'الخواجاية',
       author: 'فيموني عكاشة',
-      cover: '/book-covers/new1.jpg'
+      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3079_1744014184.jpg',
+      rating: 4.0,
+      reviews: 45
     },
     {
       id: 2,
       title: 'كوش كو',
       author: 'ولاء كمال',
-      cover: '/book-covers/new2.jpg'
+      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3085_1744031514.jpg',
+      rating: 4.3,
+      reviews: 67
     },
     {
       id: 3,
       title: 'الهندي الاحمر الاخير',
       author: 'طارق الجارد',
-      cover: '/book-covers/new3.jpg'
-    },
-    // Add more books as needed
+      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3074_1743300633.jpg',
+      rating: 4.6,
+      reviews: 89
+    }
   ];
 
   useEffect(() => {
@@ -76,6 +94,16 @@ const Books = () => {
     }
   }, [darkMode]);
 
+  useEffect(() => {
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  }, [bookmarks]);
+
+  useEffect(() => {
+    // Simulate API call
+    setMostListenedBooks(sampleMostListenedBooks);
+    setNewReleases(sampleNewReleases);
+  }, []);
+
   const toggleDarkMode = () => {
     setDarkMode(prevMode => !prevMode);
   };
@@ -90,6 +118,81 @@ const Books = () => {
     setIsAuthenticated(false);
     setUser(null);
     navigate('/');
+  };
+
+  const toggleBookmark = (book) => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    
+    setBookmarks(prevBookmarks => {
+      const isBookmarked = prevBookmarks.some(b => b.id === book.id);
+      if (isBookmarked) {
+        return prevBookmarks.filter(b => b.id !== book.id);
+      } else {
+        return [...prevBookmarks, book];
+      }
+    });
+  };
+
+  const isBookmarked = (bookId) => {
+    return bookmarks.some(book => book.id === bookId);
+  };
+
+  const renderRatingStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<i key={`full-${i}`} className="fas fa-star"></i>);
+    }
+    if (hasHalfStar) {
+      stars.push(<i key="half" className="fas fa-star-half-alt"></i>);
+    }
+    const emptyStars = 5 - Math.ceil(rating);
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<i key={`empty-${i}`} className="far fa-star"></i>);
+    }
+
+    return stars;
+  };
+
+  const handleReviewSubmit = async (reviewData) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(reviewData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit review');
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        // Update the book's rating and reviews count
+        const updatedBooks = mostListenedBooks.map(book => {
+          if (book.id === reviewData.bookId) {
+            return {
+              ...book,
+              rating: data.newRating,
+              reviews: book.reviews + 1
+            };
+          }
+          return book;
+        });
+        setMostListenedBooks(updatedBooks);
+      }
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      throw error;
+    }
   };
 
   return (
@@ -213,10 +316,36 @@ const Books = () => {
             {mostListenedBooks.map(book => (
               <div key={book.id} className="book-card">
                 <div className="book-cover">
-                  <img src={book.cover} alt={book.title} />
+                  <img 
+                    src={getImageUrl(book.cover)} 
+                    alt={book.title}
+                    onError={(e) => handleImageError(e, 'book')}
+                  />
                 </div>
-                <h4 className="book-title">{book.title}</h4>
-                <h6 className="book-author">{book.author}</h6>
+                <div className="book-info">
+                  <h4 className="book-title">{book.title}</h4>
+                  <h6 className="book-author">{book.author}</h6>
+                  <div className="book-rating">
+                    <div className="stars">
+                      {renderRatingStars(book.rating)}
+                    </div>
+                    <span className="rating-value">{book.rating}</span>
+                    <span className="reviews-count">({book.reviews} تقييم)</span>
+                  </div>
+                </div>
+                <button 
+                  className={`bookmark-btn ${isBookmarked(book.id) ? 'active' : ''}`}
+                  onClick={() => toggleBookmark(book)}
+                  title={isBookmarked(book.id) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
+                  style={{ position: 'static', margin: '1rem auto 0', display: 'block' }}
+                >
+                  <i className={`fas fa-bookmark ${isBookmarked(book.id) ? 'active' : ''}`}></i>
+                </button>
+                <BookReview
+                  bookId={book.id}
+                  onSubmit={handleReviewSubmit}
+                  isAuthenticated={isAuthenticated}
+                />
               </div>
             ))}
           </div>
@@ -229,10 +358,36 @@ const Books = () => {
             {newReleases.map(book => (
               <div key={book.id} className="book-card">
                 <div className="book-cover">
-                  <img src={book.cover} alt={book.title} />
+                  <img 
+                    src={getImageUrl(book.cover)} 
+                    alt={book.title}
+                    onError={(e) => handleImageError(e, 'book')}
+                  />
                 </div>
-                <h4 className="book-title">{book.title}</h4>
-                <h6 className="book-author">{book.author}</h6>
+                <div className="book-info">
+                  <h4 className="book-title">{book.title}</h4>
+                  <h6 className="book-author">{book.author}</h6>
+                  <div className="book-rating">
+                    <div className="stars">
+                      {renderRatingStars(book.rating)}
+                    </div>
+                    <span className="rating-value">{book.rating}</span>
+                    <span className="reviews-count">({book.reviews} تقييم)</span>
+                  </div>
+                </div>
+                <button 
+                  className={`bookmark-btn ${isBookmarked(book.id) ? 'active' : ''}`}
+                  onClick={() => toggleBookmark(book)}
+                  title={isBookmarked(book.id) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
+                  style={{ position: 'static', margin: '1rem auto 0', display: 'block' }}
+                >
+                  <i className={`fas fa-bookmark ${isBookmarked(book.id) ? 'active' : ''}`}></i>
+                </button>
+                <BookReview
+                  bookId={book.id}
+                  onSubmit={handleReviewSubmit}
+                  isAuthenticated={isAuthenticated}
+                />
               </div>
             ))}
           </div>

@@ -38,10 +38,12 @@
 /* Book Card */
 .book-card {
   background: #fff;
+  color: #333;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .book-card:hover {
@@ -53,6 +55,7 @@
   height: 300px;
   border-radius: 12px 12px 0 0;
   overflow: hidden;
+  position: relative;
 }
 
 .book-cover img {
@@ -61,35 +64,95 @@
   object-fit: cover;
 }
 
+/* Bookmark Button */
+.bookmark-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.bookmark-btn i {
+  font-size: 1.2rem;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.bookmark-btn:hover {
+  background: #fff;
+  transform: scale(1.1);
+}
+
+.bookmark-btn.active i {
+  color: #e74c3c;
+}
+
+.book-info {
+  padding: 1rem;
+}
+
 .book-title {
   font-size: 1.1rem;
   color: #333;
-  margin: 1rem;
+  margin: 0 0 0.5rem 0;
   text-align: right;
   font-weight: 600;
+  line-height: 1.4;
 }
 
 .book-author {
   font-size: 0.9rem;
   color: #666;
-  margin: 0 1rem 1rem;
+  margin: 0 0 1rem 0;
   text-align: right;
 }
 
-/* Categories Grid */
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+/* Rating Styles */
+.book-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.stars i {
+  color: #ffc107;
+  font-size: 0.9rem;
+}
+
+.rating-value {
+  font-weight: 600;
+  color: #333;
+}
+
+.reviews-count {
+  color: #666;
+  font-size: 0.85rem;
 }
 
 /* Dark mode styles */
-.dark-mode .section-title {
+.app.dark-mode .section-title {
   color: #fff;
 }
 
 .dark-mode .book-card {
   background: #2d2d2d;
+  color: #fff;
 }
 
 .dark-mode .book-title {
@@ -98,6 +161,29 @@
 
 .dark-mode .book-author {
   color: #ccc;
+}
+
+.dark-mode .bookmark-btn {
+  background: rgba(45, 45, 45, 0.9);
+}
+
+.dark-mode .bookmark-btn i {
+  color: #ccc;
+}
+
+.dark-mode .rating-value {
+  color: #fff;
+}
+
+.dark-mode .reviews-count {
+  color: #ccc;
+}
+
+/* Categories Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
 }
 
 /* Responsive adjustments */
@@ -147,4 +233,11 @@
 
 .app.dark-mode .skeleton {
   background: linear-gradient(110deg, #2c2c2c 8%, #3c3c3c 18%, #2c2c2c 33%);
+}
+
+.navbar-link {
+  color: var(--text-light) !important;
+}
+.app.dark-mode .navbar-link {
+  color: var(--text-dark) !important;
 } 

@@ -1,0 +1,142 @@
+.book-review {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.review-title {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: right;
+}
+
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stars-container {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #ddd;
+  transition: color 0.2s ease;
+}
+
+.star-btn:hover,
+.star-btn.active {
+  color: #ffc107;
+}
+
+.rating-value {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.review-input-container {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.review-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+}
+
+.review-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.char-count {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.submit-review-btn {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-review-btn:hover {
+  background: #357abd;
+}
+
+.submit-review-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Dark mode styles */
+.app.dark-mode .book-review {
+  background: #2d2d2d;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.app.dark-mode .review-title {
+  color: #fff;
+}
+
+.app.dark-mode .rating-value {
+  color: #ccc;
+}
+
+.app.dark-mode .review-input {
+  background: #3d3d3d;
+  border-color: #4d4d4d;
+  color: #fff;
+}
+
+.app.dark-mode .review-input:focus {
+  border-color: #5a9de2;
+}
+
+.app.dark-mode .char-count {
+  color: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .book-review {
+    padding: 1rem;
+  }
+
+  .rating-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .star-btn {
+    font-size: 1.25rem;
+  }
+} 
