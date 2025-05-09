@@ -15,6 +15,7 @@ import Categories from './pages/Categories';
 import BookDetails from './pages/BookDetails';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
+import Subscription from './pages/Subscription';
 
 import './App.css';
 
@@ -82,6 +83,7 @@ function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/subscription" element={<Subscription />} />
           <Route 
             path="/profile" 
             element={

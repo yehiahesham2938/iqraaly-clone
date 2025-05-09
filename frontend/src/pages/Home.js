@@ -13,7 +13,7 @@ const Home = () => {
           <div className="hero-content">
             <h1 className="main-heading">عيش رحلة مع كُتبك الصوتية المميزة</h1>
             <p className="subtitle">اقرألي أول منصة كتب صوتية و بودكاست باللغة العربية في الوطن العربي منذ ٢٠٢٥ , توفر لملايين المستمعين الآلاف من الكتب الصوتية.</p>
-            <button className="cta-button">اشترك الآن</button>
+            <button className="cta-button" onClick={() => navigate('/subscription')}>اشترك الآن</button>
           </div>
         </div>
       </section>
