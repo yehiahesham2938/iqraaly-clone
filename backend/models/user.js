@@ -22,7 +22,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minlength: 6
   },
-  profile_picture: String,
+  profile_picture: {
+    type: String,
+    default: null // Set default value to null
+  },
   subscription_status: {
     type: String, 
     enum: ['free', 'premium', 'admin'],

@@ -53,22 +53,29 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+      if (!token) {
+        throw new Error('No token found. Please log in again.');
+      }
+
       const response = await fetch('http://localhost:5000/api/auth/profile', {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+          'Content-Type': 'application/json', // Ensure the Content-Type is JSON
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData), // Send the updated profile data
       });
 
+      // Parse the response as JSON
       const data = await response.json();
-      
+
+      // Check if the response is not OK
       if (!response.ok) {
         throw new Error(data.message || 'Failed to update profile');
       }
 
+      // Update the user state with the new data
       setUser(data.user);
       setIsEditing(false);
       setSuccessMessage('Profile updated successfully');
@@ -185,4 +192,4 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;

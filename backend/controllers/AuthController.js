@@ -25,29 +25,24 @@ exports.register = async (request, response) => {
   try {
     const { username, email, password } = request.body;
 
-    // Validate input
     if (!username || !email || !password) {
       return handleError(response, 400, 'Username, email and password are required');
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
       return handleError(response, 400, 'Username or email already exists');
     }
 
-    // Create new user
     const user = new User({
       username,
       email,
-      password, // Password will be hashed by the pre-save middleware
+      password,  
       subscription_status: 'free'
     });
 
-    // Save user to database
     await user.save();
 
-    // Generate JWT token
     const token = jwt.sign(
       { 
         userId: user._id, 
@@ -58,7 +53,6 @@ exports.register = async (request, response) => {
       { expiresIn: '24h' }
     );
 
-    // Return success response
     return handleSuccess(response, 201, { 
       token,
       user: {
@@ -79,19 +73,16 @@ exports.login = async (request, response) => {
   try {
     const { email, password } = request.body;
 
-    // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return handleError(response, 401, 'Invalid email or password');
     }
 
-    // Compare passwords using the model method
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return handleError(response, 401, 'Invalid email or password');
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       { 
         userId: user._id,
@@ -101,8 +92,7 @@ exports.login = async (request, response) => {
       JWT_SECRET,
       { expiresIn: '24h' }
     );
-
-    // Return success response
+    
     return handleSuccess(response, 200, {
       token,
       user: {
@@ -132,5 +122,38 @@ exports.getProfile = async (request, response) => {
   } catch (error) {
     console.error('Profile error:', error);
     return handleError(response, 500, 'Internal server error');
+  }
+};
+exports.updateProfile = async (req, res) => {
+  console.log('PUT /api/auth/profile called'); // Log when the route is hit
+  console.log('Authenticated user:', req.user); // Log the user object
+
+  try {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const { username, email, profile_picture } = req.body;
+
+    if (!username || !email) {
+      return res.status(400).json({ success: false, message: 'Username and email are required' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username, email, profile_picture },
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    res.status(200).json({ success: true, user: updatedUser });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
