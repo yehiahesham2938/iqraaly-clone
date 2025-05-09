@@ -22,13 +22,12 @@ const Subscription = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically handle the payment processing
+   
     console.log('Form submitted:', formData);
     
-    // Store premium status in localStorage
+ 
     localStorage.setItem('isPremium', 'true');
     
-    // Show success notification
     const notification = document.createElement('div');
     notification.className = 'success-notification';
     notification.innerHTML = `
@@ -40,12 +39,12 @@ const Subscription = () => {
     `;
     document.body.appendChild(notification);
 
-    // Remove notification after 5 seconds
+   
     setTimeout(() => {
       notification.remove();
     }, 5000);
 
-    // Redirect to home page
+    
     navigate('/');
   };
 
