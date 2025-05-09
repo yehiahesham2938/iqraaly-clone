@@ -20,61 +20,6 @@ const Books = () => {
   const [mostListenedBooks, setMostListenedBooks] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
 
-  // Sample data - Replace with your actual data from API
-  const sampleMostListenedBooks = [
-    {
-      id: 1,
-      title: 'هاتف وثلاث جثث - الكتاب الأول',
-      author: 'يارا رضوان',
-      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3065_1743036919.jpg',
-      rating: 4.5,
-      reviews: 128
-    },
-    {
-      id: 2,
-      title: 'جنينة المحروقي',
-      author: 'يحيى صفوت',
-      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3073_1743298285.jpg',
-      rating: 4.2,
-      reviews: 95
-    },
-    {
-      id: 3,
-      title: 'أوراق شمعون المصري',
-      author: 'أسامة عبد الرؤف الشاذلي',
-      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3002_1738774473.jpg',
-      rating: 4.8,
-      reviews: 156
-    }
-  ];
-
-  const sampleNewReleases = [
-    {
-      id: 1,
-      title: 'الخواجاية',
-      author: 'فيموني عكاشة',
-      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3079_1744014184.jpg',
-      rating: 4.0,
-      reviews: 45
-    },
-    {
-      id: 2,
-      title: 'كوش كو',
-      author: 'ولاء كمال',
-      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3085_1744031514.jpg',
-      rating: 4.3,
-      reviews: 67
-    },
-    {
-      id: 3,
-      title: 'الهندي الاحمر الاخير',
-      author: 'طارق الجارد',
-      cover: 'https://images.media.iqraaly.com:444/users/1/shows/3074_1743300633.jpg',
-      rating: 4.6,
-      reviews: 89
-    }
-  ];
-
   useEffect(() => {
     // Check if user is authenticated
     const token = localStorage.getItem('token');
@@ -99,9 +44,23 @@ const Books = () => {
   }, [bookmarks]);
 
   useEffect(() => {
-    // Simulate API call
-    setMostListenedBooks(sampleMostListenedBooks);
-    setNewReleases(sampleNewReleases);
+    // Fetch audiobooks from the backend
+    fetch('http://localhost:5000/api/audiobooks')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          setMostListenedBooks(data.audiobooks);
+          setNewReleases(data.audiobooks); // Assuming new releases are part of the same data
+        } else {
+          console.error('Failed to fetch audiobooks:', data.message);
+        }
+      })
+      .catch(error => console.error('Error fetching audiobooks:', error));
   }, []);
 
   const toggleDarkMode = () => {
@@ -313,7 +272,7 @@ const Books = () => {
         <section className="books-section">
           <h3 className="section-title">الأكثر استماعا</h3>
           <div className="books-grid">
-            {mostListenedBooks.map(book => (
+            {(mostListenedBooks || []).map(book => (
               <div key={book.id} className="book-card">
                 <div className="book-cover">
                   <img 
@@ -355,7 +314,7 @@ const Books = () => {
         <section className="books-section">
           <h3 className="section-title">جديد اقرألي</h3>
           <div className="books-grid">
-            {newReleases.map(book => (
+            {(newReleases || []).map(book => (
               <div key={book.id} className="book-card">
                 <div className="book-cover">
                   <img 

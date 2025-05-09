@@ -1,3 +1,55 @@
+.player-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #282828;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.player-info-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-track-info img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.player-track-info h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.player-track-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #b3b3b3;
+}
+
+.player-controls-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.secondary-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .player-controls {
   display: flex;
   flex-direction: column;

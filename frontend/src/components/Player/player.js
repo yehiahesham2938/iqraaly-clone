@@ -43,6 +43,15 @@ const Player = () => {
     );
   }
 
+  const downloadAudio = (url) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = url.split('/').pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Main player UI
   return (
     <div className={`player-container ${isPlaying ? 'is-playing' : ''}`}>
@@ -62,6 +71,9 @@ const Player = () => {
         <div className="secondary-controls-group">
           <VolumeControl />
           <PlaybackSpeedControl />
+          <button className="download-button" onClick={() => downloadAudio(currentTrack.file_url)}>
+            Download
+          </button>
         </div>
       </div>
     </div>

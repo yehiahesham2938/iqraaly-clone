@@ -10,7 +10,8 @@ const ReviewSchema = new mongoose.Schema({
   content_id: { type: mongoose.Schema.Types.ObjectId, required: true },
   rating: {
     type: Number, min: 1, max: 5, required: true},
-  comment: String
+  comment: String,
+  comments: String
 }, { timestamps: true });
 
 module.exports = mongoose.model('review', ReviewSchema);
