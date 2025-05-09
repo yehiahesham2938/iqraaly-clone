@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import PlayerControls from './PlayerControls';
 import ProgressBar from './ProgressBar';
@@ -6,36 +6,75 @@ import VolumeControl from './VolumeControl';
 import PlaybackSpeedControl from './PlaybackSpeedControl';
 import './Player.css';
 
-const Player = () => {
-  const { currentTrack, isPlaying, isLoading, error } = useAudioPlayer();
+const Player = ({ track }) => {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="player-container loading-state">
-        <div className="loading-spinner"></div>
-        <p>Loading audio player...</p>
-      </div>
-    );
-  }
+  const handlePlayPause = () => {
+    console.log('Play/Pause button clicked');
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current.play().then(() => {
+          console.log('Audio play triggered');
+          setIsPlaying(true);
+        }).catch(error => console.error('Error playing audio:', error));
+      } else {
+        audioRef.current.pause();
+        console.log('Audio pause triggered');
+        setIsPlaying(false);
+      }
+    }
+  };
 
-  // Error state
-  if (error) {
-    return (
-      <div className="player-container error-state">
-        <p className="error-message">⚠️ Error: {error.message}</p>
-        <button 
-          className="retry-button"
-          onClick={() => window.location.reload()}
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (audioRef.current) {
+      console.log('Initializing audio with URL:', track.file_url);
+      audioRef.current.src = track.file_url;
+      audioRef.current.load(); // Ensure the audio is loaded
+      audioRef.current.onloadedmetadata = () => {
+        console.log('Audio duration:', audioRef.current.duration);
+      };
+      audioRef.current.ontimeupdate = () => {
+        console.log('Current time:', audioRef.current.currentTime);
+      };
+      audioRef.current.onplay = () => {
+        console.log('Audio is playing');
+        setIsPlaying(true);
+      };
+      audioRef.current.onpause = () => {
+        console.log('Audio is paused');
+        setIsPlaying(false);
+      };
+      audioRef.current.onerror = (e) => {
+        console.error('Audio error:', e);
+      };
+    }
+  }, [track]);
+
+  const handleLoadedMetadata = () => {
+    // Update UI with audio duration
+    console.log('Audio duration:', audioRef.current.duration);
+  };
+
+  const handleTimeUpdate = () => {
+    // Update UI with current time
+    console.log('Current time:', audioRef.current.currentTime);
+  };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.addEventListener('timeupdate', handleTimeUpdate);
+      return () => {
+        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        audio.removeEventListener('timeupdate', handleTimeUpdate);
+      };
+    }
+  }, []);
 
   // Empty state
-  if (!currentTrack) {
+  if (!track) {
     return (
       <div className="player-container empty-state">
         <p className="empty-message">🎵 Select a track to begin listening</p>
@@ -55,23 +94,14 @@ const Player = () => {
   // Main player UI
   return (
     <div className={`player-container ${isPlaying ? 'is-playing' : ''}`}>
-      <div className="player-info-section">
-        <div className="player-track-info">
-          <img src={currentTrack.cover_url} alt={currentTrack.title} />
-          <div>
-            <h4>{currentTrack.title}</h4>
-            <p>{currentTrack.author}</p>
-          </div>
-        </div>
-      </div>
-      
+      <audio ref={audioRef} controls style={{ display: 'none' }} />
       <div className="player-controls-wrapper">
         <ProgressBar />
-        <PlayerControls />
+        <PlayerControls togglePlayPause={handlePlayPause} isPlaying={isPlaying} />
         <div className="secondary-controls-group">
           <VolumeControl />
           <PlaybackSpeedControl />
-          <button className="download-button" onClick={() => downloadAudio(currentTrack.file_url)}>
+          <button className="download-button" onClick={() => downloadAudio(track.file_url)}>
             Download
           </button>
         </div>

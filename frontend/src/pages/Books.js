@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getImageUrl, handleImageError } from '../utils/imageUtils';
 import BookReview from '../components/BookReview';
+import Player from '../components/Player/player';
+import { AudioPlayerProvider } from '../contexts/AudioPlayerContext';
 import './Books.css';
 
 const Books = () => {
@@ -19,6 +21,7 @@ const Books = () => {
   });
   const [mostListenedBooks, setMostListenedBooks] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
+  const [currentTrack, setCurrentTrack] = useState(null);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -154,213 +157,223 @@ const Books = () => {
     }
   };
 
+  const handleBookClick = (book) => {
+    console.log('Book clicked:', book);
+    setCurrentTrack(book);
+  };
+
   return (
-    <div dir="rtl" className={`app ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-      {/* Navbar */}
-      <nav className="navbar">
-        <div className="navbar-container">
-          <div className="navbar-brand">
-            <Link to="/" className="navbar-logo">اقرألي</Link>
+    <AudioPlayerProvider>
+      <div dir="rtl" className={`app ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+        {/* Navbar */}
+        <nav className="navbar">
+          <div className="navbar-container">
+            <div className="navbar-brand">
+              <Link to="/" className="navbar-logo">اقرألي</Link>
+            </div>
+            
+            <div className="navbar-links">
+              <Link to="/" className="navbar-link">الرئيسية</Link>
+              <Link to="/books" className="navbar-link active">الكتب</Link>
+              <Link to="/categories" className="navbar-link">التصنيفات</Link>
+              <Link to="/about" className="navbar-link">من نحن</Link>
+            </div>
+            
+            <div className="navbar-actions">
+              {isAuthenticated ? (
+                <>
+                  <button
+                    className="auth-button profile-button"
+                    onClick={() => navigate('/profile')}
+                  >
+                    {user?.username}
+                  </button>
+                  <button
+                    className="auth-button logout-button"
+                    onClick={handleLogout}
+                  >
+                    تسجيل الخروج
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="auth-button login-button"
+                    onClick={() => navigate('/login')}
+                  >
+                    تسجيل الدخول
+                  </button>
+                  <button
+                    className="btn btn-register"
+                    onClick={() => navigate('/register')}
+                  >
+                    إنشاء حساب
+                  </button>
+                </>
+              )}
+              <button 
+                className="dark-mode-toggle"
+                onClick={toggleDarkMode}
+                aria-label={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
+                title={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
+              >
+                {darkMode ? (
+                  <i className="fas fa-sun"></i>
+                ) : (
+                  <i className="fas fa-moon"></i>
+                )}
+              </button>
+              <button 
+                className="navbar-mobile-toggle"
+                onClick={toggleMobileMenu}
+                aria-label={showMobileMenu ? "إغلاق القائمة" : "فتح القائمة"}
+              >
+                <i className={showMobileMenu ? "fas fa-times" : "fas fa-bars"}></i>
+              </button>
+            </div>
           </div>
           
-          <div className="navbar-links">
+          <div className={`navbar-mobile-menu ${showMobileMenu ? 'open' : ''}`}>
             <Link to="/" className="navbar-link">الرئيسية</Link>
             <Link to="/books" className="navbar-link active">الكتب</Link>
             <Link to="/categories" className="navbar-link">التصنيفات</Link>
             <Link to="/about" className="navbar-link">من نحن</Link>
-          </div>
-          
-          <div className="navbar-actions">
-            {isAuthenticated ? (
-              <>
-                <button
-                  className="auth-button profile-button"
-                  onClick={() => navigate('/profile')}
-                >
-                  {user?.username}
-                </button>
-                <button
-                  className="auth-button logout-button"
-                  onClick={handleLogout}
-                >
-                  تسجيل الخروج
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="auth-button login-button"
-                  onClick={() => navigate('/login')}
-                >
-                  تسجيل الدخول
-                </button>
-                <button
-                  className="btn btn-register"
-                  onClick={() => navigate('/register')}
-                >
-                  إنشاء حساب
-                </button>
-              </>
-            )}
-            <button 
-              className="dark-mode-toggle"
-              onClick={toggleDarkMode}
-              aria-label={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
-              title={darkMode ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
-            >
-              {darkMode ? (
-                <i className="fas fa-sun"></i>
+            
+            <div className="navbar-actions">
+              {isAuthenticated ? (
+                <>
+                  <button
+                    className="auth-button profile-button"
+                    onClick={() => navigate('/profile')}
+                  >
+                    {user?.username}
+                  </button>
+                  <button
+                    className="auth-button logout-button"
+                    onClick={handleLogout}
+                  >
+                    تسجيل الخروج
+                  </button>
+                </>
               ) : (
-                <i className="fas fa-moon"></i>
+                <>
+                  <button
+                    className="auth-button login-button"
+                    onClick={() => navigate('/login')}
+                  >
+                    تسجيل الدخول
+                  </button>
+                  <button
+                    className="auth-button btn-register"
+                    onClick={() => navigate('/register')}
+                  >
+                    إنشاء حساب
+                  </button>
+                </>
               )}
-            </button>
-            <button 
-              className="navbar-mobile-toggle"
-              onClick={toggleMobileMenu}
-              aria-label={showMobileMenu ? "إغلاق القائمة" : "فتح القائمة"}
-            >
-              <i className={showMobileMenu ? "fas fa-times" : "fas fa-bars"}></i>
-            </button>
+            </div>
           </div>
-        </div>
-        
-        <div className={`navbar-mobile-menu ${showMobileMenu ? 'open' : ''}`}>
-          <Link to="/" className="navbar-link">الرئيسية</Link>
-          <Link to="/books" className="navbar-link active">الكتب</Link>
-          <Link to="/categories" className="navbar-link">التصنيفات</Link>
-          <Link to="/about" className="navbar-link">من نحن</Link>
-          
-          <div className="navbar-actions">
-            {isAuthenticated ? (
-              <>
-                <button
-                  className="auth-button profile-button"
-                  onClick={() => navigate('/profile')}
-                >
-                  {user?.username}
-                </button>
-                <button
-                  className="auth-button logout-button"
-                  onClick={handleLogout}
-                >
-                  تسجيل الخروج
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="auth-button login-button"
-                  onClick={() => navigate('/login')}
-                >
-                  تسجيل الدخول
-                </button>
-                <button
-                  className="auth-button btn-register"
-                  onClick={() => navigate('/register')}
-                >
-                  إنشاء حساب
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </nav>
+        </nav>
 
-      {/* Books Content */}
-      <div className="books-container">
-        {/* Most Listened Section */}
-        <section className="books-section">
-          <h3 className="section-title">الأكثر استماعا</h3>
-          <div className="books-grid">
-            {(mostListenedBooks || []).map(book => (
-              <div key={book.id} className="book-card">
-                <div className="book-cover">
-                  <img 
-                    src={getImageUrl(book.cover)} 
-                    alt={book.title}
-                    onError={(e) => handleImageError(e, 'book')}
+        {/* Books Content */}
+        <div className="books-container">
+          {/* Most Listened Section */}
+          <section className="books-section">
+            <h3 className="section-title">الأكثر استماعا</h3>
+            <div className="books-grid">
+              {(mostListenedBooks || []).map(book => (
+                <div key={book.id} className="book-card" onClick={() => handleBookClick(book)}>
+                  <div className="book-cover">
+                    <img 
+                      src={getImageUrl(book.cover)} 
+                      alt={book.title}
+                      onError={(e) => handleImageError(e, 'book')}
+                    />
+                  </div>
+                  <div className="book-info">
+                    <h4 className="book-title">{book.title}</h4>
+                    <h6 className="book-author">{book.author}</h6>
+                    <div className="book-rating">
+                      <div className="stars">
+                        {renderRatingStars(book.rating)}
+                      </div>
+                      <span className="rating-value">{book.rating}</span>
+                      <span className="reviews-count">({book.reviews} تقييم)</span>
+                    </div>
+                  </div>
+                  <button 
+                    className={`bookmark-btn ${isBookmarked(book.id) ? 'active' : ''}`}
+                    onClick={() => toggleBookmark(book)}
+                    title={isBookmarked(book.id) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
+                    style={{ position: 'static', margin: '1rem auto 0', display: 'block' }}
+                  >
+                    <i className={`fas fa-bookmark ${isBookmarked(book.id) ? 'active' : ''}`}></i>
+                  </button>
+                  <BookReview
+                    bookId={book.id}
+                    onSubmit={handleReviewSubmit}
+                    isAuthenticated={isAuthenticated}
                   />
                 </div>
-                <div className="book-info">
-                  <h4 className="book-title">{book.title}</h4>
-                  <h6 className="book-author">{book.author}</h6>
-                  <div className="book-rating">
-                    <div className="stars">
-                      {renderRatingStars(book.rating)}
-                    </div>
-                    <span className="rating-value">{book.rating}</span>
-                    <span className="reviews-count">({book.reviews} تقييم)</span>
-                  </div>
-                </div>
-                <button 
-                  className={`bookmark-btn ${isBookmarked(book.id) ? 'active' : ''}`}
-                  onClick={() => toggleBookmark(book)}
-                  title={isBookmarked(book.id) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
-                  style={{ position: 'static', margin: '1rem auto 0', display: 'block' }}
-                >
-                  <i className={`fas fa-bookmark ${isBookmarked(book.id) ? 'active' : ''}`}></i>
-                </button>
-                <BookReview
-                  bookId={book.id}
-                  onSubmit={handleReviewSubmit}
-                  isAuthenticated={isAuthenticated}
-                />
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
 
-        {/* New Releases Section */}
-        <section className="books-section">
-          <h3 className="section-title">جديد اقرألي</h3>
-          <div className="books-grid">
-            {(newReleases || []).map(book => (
-              <div key={book.id} className="book-card">
-                <div className="book-cover">
-                  <img 
-                    src={getImageUrl(book.cover)} 
-                    alt={book.title}
-                    onError={(e) => handleImageError(e, 'book')}
+          {/* New Releases Section */}
+          <section className="books-section">
+            <h3 className="section-title">جديد اقرألي</h3>
+            <div className="books-grid">
+              {(newReleases || []).map(book => (
+                <div key={book.id} className="book-card" onClick={() => handleBookClick(book)}>
+                  <div className="book-cover">
+                    <img 
+                      src={getImageUrl(book.cover)} 
+                      alt={book.title}
+                      onError={(e) => handleImageError(e, 'book')}
+                    />
+                  </div>
+                  <div className="book-info">
+                    <h4 className="book-title">{book.title}</h4>
+                    <h6 className="book-author">{book.author}</h6>
+                    <div className="book-rating">
+                      <div className="stars">
+                        {renderRatingStars(book.rating)}
+                      </div>
+                      <span className="rating-value">{book.rating}</span>
+                      <span className="reviews-count">({book.reviews} تقييم)</span>
+                    </div>
+                  </div>
+                  <button 
+                    className={`bookmark-btn ${isBookmarked(book.id) ? 'active' : ''}`}
+                    onClick={() => toggleBookmark(book)}
+                    title={isBookmarked(book.id) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
+                    style={{ position: 'static', margin: '1rem auto 0', display: 'block' }}
+                  >
+                    <i className={`fas fa-bookmark ${isBookmarked(book.id) ? 'active' : ''}`}></i>
+                  </button>
+                  <BookReview
+                    bookId={book.id}
+                    onSubmit={handleReviewSubmit}
+                    isAuthenticated={isAuthenticated}
                   />
                 </div>
-                <div className="book-info">
-                  <h4 className="book-title">{book.title}</h4>
-                  <h6 className="book-author">{book.author}</h6>
-                  <div className="book-rating">
-                    <div className="stars">
-                      {renderRatingStars(book.rating)}
-                    </div>
-                    <span className="rating-value">{book.rating}</span>
-                    <span className="reviews-count">({book.reviews} تقييم)</span>
-                  </div>
-                </div>
-                <button 
-                  className={`bookmark-btn ${isBookmarked(book.id) ? 'active' : ''}`}
-                  onClick={() => toggleBookmark(book)}
-                  title={isBookmarked(book.id) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
-                  style={{ position: 'static', margin: '1rem auto 0', display: 'block' }}
-                >
-                  <i className={`fas fa-bookmark ${isBookmarked(book.id) ? 'active' : ''}`}></i>
-                </button>
-                <BookReview
-                  bookId={book.id}
-                  onSubmit={handleReviewSubmit}
-                  isAuthenticated={isAuthenticated}
-                />
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
 
-        {/* Categories Section */}
-        <section className="books-section">
-          <h3 className="section-title">اكتشف التصنيفات</h3>
-          <div className="categories-grid">
-            {/* Add your categories here */}
-          </div>
-        </section>
+          {/* Categories Section */}
+          <section className="books-section">
+            <h3 className="section-title">اكتشف التصنيفات</h3>
+            <div className="categories-grid">
+              {/* Add your categories here */}
+            </div>
+          </section>
+        </div>
+
+        {/* Player Component */}
+        {currentTrack && <Player track={currentTrack} />}
       </div>
-    </div>
+    </AudioPlayerProvider>
   );
 };
 
