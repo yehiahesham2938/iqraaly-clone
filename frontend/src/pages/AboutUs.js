@@ -174,6 +174,7 @@ const AboutUs = () => {
               مما يتيح لك الاستفادة القصوى من وقتك بشكل فعال ومريح.
             </p>
           </div>
+           
 
           <div className="team-section">
             <h3>فريقنا</h3>
@@ -181,10 +182,19 @@ const AboutUs = () => {
               {/* Add team members here */}
               <div className="team-member">
                 <div className="member-image"></div>
-                <h4>اسم العضو</h4>
-                <p>المسمى الوظيفي</p>
+                <h4> محمد فؤاد</h4>
+                <p> فريق المحتوى الإبداعي, كاتب ومحرر صوتي</p>
               </div>
-              {/* Add more team members as needed */}
+              <div className="team-member">
+                <div className="member-image"></div>
+                <h4> أحمد مصطفى</h4>
+                <p>  فريق التطوير التقني, مطور برمجيات رئيسي</p>
+              </div>
+              <div className="team-member">
+                <div className="member-image"></div>
+                <h4> سارة عبد الله</h4>
+                <p>  فريق التسويق والإعلام, مسؤولة التسويق الرقمي</p>
+              </div>
             </div>
           </div>
 
