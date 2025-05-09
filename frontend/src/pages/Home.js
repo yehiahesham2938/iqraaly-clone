@@ -102,7 +102,7 @@ const Home = () => {
                   <li>استمع بدون إنترنت</li>
                   <li>دعم فني على مدار الساعة</li>
                 </ul>
-                <button className="plan-button">اشترك الآن</button>
+                <button className="plan-button" onClick={() => navigate('/subscription')}>اشترك الآن</button>
               </div>
               <div className="plan featured-plan">
                 <div className="plan-badge">الأكثر توفيراً</div>
@@ -115,7 +115,7 @@ const Home = () => {
                   <li>دعم فني على مدار الساعة</li>
                   <li>تحديثات أسبوعية</li>
                 </ul>
-                <button className="plan-button">اشترك الآن</button>
+                <button className="plan-button" onClick={() => navigate('/subscription')}>اشترك الآن</button>
               </div>
             </div>
           </div>
