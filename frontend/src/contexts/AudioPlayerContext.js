@@ -3,15 +3,15 @@ import React, { createContext, useState, useEffect, useRef } from 'react';
 export const AudioPlayerContext = createContext();
 
 export const AudioPlayerProvider = ({ children }) => {
-  const [currenttrack, setcurrenttrack] = useState(null);
-  const [isplaying, setisplaying] = useState(false);
-  const [duration, setduration] = useState(0);
-  const [currenttime, setcurrenttime] = useState(0);
-  const [volume, setvolume] = useState(0.7);
-  const [playbackrate, setplaybackrate] = useState(1);
-  const [audiobooks, setaudiobooks] = useState([]);
-  const [loading, setloading] = useState(false);
-  const [error, seterror] = useState(null);
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [volume, setVolume] = useState(0.7);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [audiobooks, setAudiobooks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [isBuffering, setIsBuffering] = useState(false);
   const [bufferProgress, setBufferProgress] = useState(0);
   const [offlineTracks, setOfflineTracks] = useState(() => {
@@ -26,7 +26,7 @@ export const AudioPlayerProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchAudiobooks = async () => {  
-      setloading(true);
+      setLoading(true);
       try {
         const response = await fetch('http://localhost:5000/api/audiobooks');
         if (!response.ok) {
@@ -34,13 +34,13 @@ export const AudioPlayerProvider = ({ children }) => {
         }
         const data = await response.json();
         if (data.success) {
-          setaudiobooks(data.audiobooks);
+          setAudiobooks(data.audiobooks);
         }
       } catch (err) {
-        seterror(err.message);
+        setError(err.message);
         console.error('Error fetching audiobooks:', err);
       } finally {
-        setloading(false);
+        setLoading(false);
       }
     };
 
@@ -70,8 +70,8 @@ export const AudioPlayerProvider = ({ children }) => {
 
       const handleError = (e) => {
         console.error('Audio error:', e);
-        seterror('Error playing audio. Please try again.');
-        setisplaying(false);
+        setError('Error playing audio. Please try again.');
+        setIsPlaying(false);
       };
 
       audio.addEventListener('waiting', handleWaiting);
@@ -86,29 +86,29 @@ export const AudioPlayerProvider = ({ children }) => {
         audio.removeEventListener('error', handleError);
       };
     }
-  }, [currenttrack]);
+  }, [currentTrack]);
 
   useEffect(() => {
     if (audioRef.current) {
-      if (isplaying) {
+      if (isPlaying) {
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch(err => {
             console.error('Error playing audio:', err);
-            setisplaying(false);
+            setIsPlaying(false);
           });
         }
       } else {
         audioRef.current.pause();
       }
     }
-  }, [isplaying, currenttrack]);
+  }, [isPlaying, currentTrack]);
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.playbackRate = playbackrate;
+      audioRef.current.playbackRate = playbackRate;
     }
-  }, [playbackrate]);
+  }, [playbackRate]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -117,38 +117,38 @@ export const AudioPlayerProvider = ({ children }) => {
   }, [volume]);
 
   const handlePlay = () => {
-    setisplaying(true);
+    setIsPlaying(true);
   };
 
   const handlePause = () => {
-    setisplaying(false);
+    setIsPlaying(false);
   };
 
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
-      setduration(audioRef.current.duration);
+      setDuration(audioRef.current.duration);
     }
   };
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
-      setcurrenttime(audioRef.current.currentTime);
+      setCurrentTime(audioRef.current.currentTime);
     }
   };
 
   const handleSeek = (value) => {
     if (audioRef.current) {
       audioRef.current.currentTime = value;
-      setcurrenttime(value);
+      setCurrentTime(value);
     }
   };
 
   const handleVolumeChange = (value) => {
-    setvolume(value);
+    setVolume(value);
   };
 
   const handlePlaybackRateChange = (rate) => {
-    setplaybackrate(rate);
+    setPlaybackRate(rate);
   };
 
   const loadTrack = (track) => {
@@ -157,21 +157,21 @@ export const AudioPlayerProvider = ({ children }) => {
     if (offlineTrack && offlineTrack.offlineUrl) {
       track.file_url = offlineTrack.offlineUrl;
     }
-    setcurrenttrack(track);
-    setisplaying(true);
-    setcurrenttime(0);
-    seterror(null);
+    setCurrentTrack(track);
+    setIsPlaying(true);
+    setCurrentTime(0);
+    setError(null);
   };
 
   return (
     <AudioPlayerContext.Provider
       value={{
-        currenttrack,
-        isplaying,
+        currentTrack,
+        isPlaying,
         duration,
-        currenttime,
+        currentTime,
         volume,
-        playbackrate,
+        playbackRate,
         audiobooks,
         loading,
         error,
@@ -190,14 +190,14 @@ export const AudioPlayerProvider = ({ children }) => {
       }}
     >
       {children}
-      {currenttrack && (
+      {currentTrack && (
         <audio
           ref={audioRef}
-          src={currenttrack.file_url}
+          src={currentTrack.file_url}
           preload="auto"
           onLoadedMetadata={handleLoadedMetadata}
           onTimeUpdate={handleTimeUpdate}
-          onEnded={() => setisplaying(false)}
+          onEnded={() => setIsPlaying(false)}
         />
       )}
     </AudioPlayerContext.Provider>
