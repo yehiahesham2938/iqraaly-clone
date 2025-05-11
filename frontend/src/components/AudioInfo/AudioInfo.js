@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
+import { getImageUrl, handleImageError } from '../../utils/imageUtils';
 import OfflineMode from '../Player/OfflineMode';
 import './AudioInfo.css';
 
@@ -20,8 +21,13 @@ const AudioInfo = ({ track }) => {
   return (
     <div className="audio-info">
       <div className="audio-thumbnail">
-        {displayTrack.cover_url ? (
-          <img src={displayTrack.cover_url} alt="Track cover" className="audio-cover" />
+        {displayTrack.cover ? (
+          <img 
+            src={getImageUrl(displayTrack.cover)} 
+            alt="Track cover" 
+            className="audio-cover"
+            onError={(e) => handleImageError(e, 'book')}
+          />
         ) : (
           <div className="placeholder-cover">
             {displayTrack.title ? displayTrack.title.charAt(0).toUpperCase() : '🎵'}

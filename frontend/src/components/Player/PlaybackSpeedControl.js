@@ -1,45 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
-import './Player.css';
 
 const PlaybackSpeedControl = () => {
-  const { playbackRate = 1.0, handlePlaybackRateChange } = useAudioPlayer();
-  const [isOpen, setIsOpen] = useState(false);
+  const { playbackrate, handlePlaybackRateChange } = useAudioPlayer();
+  const [showOptions, setShowOptions] = useState(false);
+  const [currentSpeed, setCurrentSpeed] = useState(1.0);
 
-  const speedOptions = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
+  const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
+
+  useEffect(() => {
+    if (playbackrate) {
+      setCurrentSpeed(playbackrate);
+    }
+  }, [playbackrate]);
 
   const handleSpeedChange = (speed) => {
     handlePlaybackRateChange(speed);
-    setIsOpen(false);
+    setCurrentSpeed(speed);
+    setShowOptions(false);
   };
 
   const formatSpeed = (speed) => {
-    if (typeof speed !== 'number') return '1.00x';
-    return speed.toFixed(2) + 'x';
+    if (typeof speed !== 'number') return '1x';
+    return speed === 1 ? '1x' : `${speed}x`;
   };
 
   return (
     <div className="playback-speed-control">
-      <button
+      <button 
         className="speed-button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label={`Current speed: ${formatSpeed(playbackRate)}`}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
+        onClick={() => setShowOptions(!showOptions)}
       >
-        {formatSpeed(playbackRate)}
+        {formatSpeed(currentSpeed)}
       </button>
-      {isOpen && (
-        <div className="speed-options" role="menu">
-          {speedOptions.map((speed) => (
+      {showOptions && (
+        <div className="speed-options">
+          {speeds.map((speed) => (
             <button
               key={speed}
-              className={`speed-option ${speed === playbackRate ? 'active' : ''}`}
+              className={`speed-option ${speed === currentSpeed ? 'active' : ''}`}
               onClick={() => handleSpeedChange(speed)}
-              role="menuitem"
-              aria-label={`Set speed to ${speed}x`}
             >
-              {speed.toFixed(2)}x
+              {formatSpeed(speed)}
             </button>
           ))}
         </div>
