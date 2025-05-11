@@ -9,13 +9,9 @@ const Player = () => {
     isPlaying
   } = useAudioPlayer();
 
-  // Empty state
+  // Return null if no track is selected
   if (!currentTrack) {
-    return (
-      <div className="player-container empty-state">
-        <p className="empty-message">🎵 Select a track to begin listening</p>
-      </div>
-    );
+    return null;
   }
 
   const downloadAudio = (url) => {
