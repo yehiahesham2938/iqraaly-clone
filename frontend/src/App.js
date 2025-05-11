@@ -95,6 +95,7 @@ function App() {
           <Route path="/books/:id" element={<BookDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Player />
       </div>
     </AudioPlayerProvider>
   );

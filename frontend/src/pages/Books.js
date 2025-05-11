@@ -57,7 +57,7 @@ const Books = () => {
       .then(data => {
         if (data.success) {
           setMostListenedBooks(data.audiobooks);
-          setNewReleases(data.audiobooks); 
+          setNewReleases(data.audiobooks); // Assuming new releases are part of the same data
         } else {
           console.error('Failed to fetch audiobooks:', data.message);
         }

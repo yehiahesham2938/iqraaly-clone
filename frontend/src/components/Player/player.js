@@ -1,23 +1,15 @@
 import React from 'react';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import PlayerControls from './PlayerControls';
-import ProgressBar from './ProgressBar';
-import VolumeControl from './VolumeControl';
-import PlaybackSpeedControl from './PlaybackSpeedControl';
 import './Player.css';
 
 const Player = () => {
   const { 
     currentTrack,
-    isPlaying,
-    handlePlay,
-    handlePause,
-    handleSeek,
-    handleVolumeChange,
-    handlePlaybackRateChange
+    isPlaying
   } = useAudioPlayer();
 
-  
+  // Empty state
   if (!currentTrack) {
     return (
       <div className="player-container empty-state">
@@ -35,15 +27,22 @@ const Player = () => {
     document.body.removeChild(link);
   };
 
-  
+  // Main player UI
   return (
     <div className={`player-container ${isPlaying ? 'is-playing' : ''}`}>
+      <div className="player-info-section">
+        <div className="player-track-info">
+          <img src={currentTrack.cover_url} alt={currentTrack.title} />
+          <div>
+            <h4>{currentTrack.title}</h4>
+            <p>{currentTrack.author}</p>
+          </div>
+        </div>
+      </div>
+      
       <div className="player-controls-wrapper">
-        <ProgressBar />
         <PlayerControls />
         <div className="secondary-controls-group">
-          <VolumeControl />
-          <PlaybackSpeedControl />
           <button className="download-button" onClick={() => downloadAudio(currentTrack.file_url)}>
             Download
           </button>
