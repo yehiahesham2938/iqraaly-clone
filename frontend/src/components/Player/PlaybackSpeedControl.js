@@ -3,35 +3,43 @@ import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import './Player.css';
 
 const PlaybackSpeedControl = () => {
-  const { playbackrate, handlePlaybackRateChange } = useAudioPlayer();
-  const [isSpeedMenuOpen, setIsSpeedMenuOpen] = useState(false);
+  const { playbackRate = 1.0, handlePlaybackRateChange } = useAudioPlayer();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const speedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
+  const speedOptions = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 
-  const toggleSpeedMenu = () => {
-    setIsSpeedMenuOpen(!isSpeedMenuOpen);
+  const handleSpeedChange = (speed) => {
+    handlePlaybackRateChange(speed);
+    setIsOpen(false);
   };
 
-  const changeSpeed = (speed) => {
-    handlePlaybackRateChange(speed);
-    setIsSpeedMenuOpen(false);
+  const formatSpeed = (speed) => {
+    if (typeof speed !== 'number') return '1.00x';
+    return speed.toFixed(2) + 'x';
   };
 
   return (
     <div className="playback-speed-control">
-      <button className="speed-button" onClick={toggleSpeedMenu}>
-        {playbackrate}x
+      <button
+        className="speed-button"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={`Current speed: ${formatSpeed(playbackRate)}`}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+      >
+        {formatSpeed(playbackRate)}
       </button>
-
-      {isSpeedMenuOpen && (
-        <div className="speed-options">
+      {isOpen && (
+        <div className="speed-options" role="menu">
           {speedOptions.map((speed) => (
             <button
               key={speed}
-              className={`speed-option ${speed === playbackrate ? 'active' : ''}`}
-              onClick={() => changeSpeed(speed)}
+              className={`speed-option ${speed === playbackRate ? 'active' : ''}`}
+              onClick={() => handleSpeedChange(speed)}
+              role="menuitem"
+              aria-label={`Set speed to ${speed}x`}
             >
-              {speed}x
+              {speed.toFixed(2)}x
             </button>
           ))}
         </div>

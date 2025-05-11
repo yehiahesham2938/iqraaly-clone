@@ -34,23 +34,23 @@ const PlayerControls = () => {
       <div className="player-main-controls">
         {/* Previous Button */}
         <button className="player-control-button prev" onClick={handlePrevious}>
-          <i className="fas fa-step-backward">⏮</i>
+          <i className="fas fa-step-backward"></i>
         </button>
 
         {/* Play/Pause Button */}
         {isPlaying ? (
           <button className="player-control-button pause" onClick={handlePause}>
-            <i className="fas fa-pause">⏸</i>
+            <i className="fas fa-pause"></i>
           </button>
         ) : (
           <button className="player-control-button play" onClick={handlePlay}>
-            <i className="fas fa-play">▶️</i>
+            <i className="fas fa-play"></i>
           </button>
         )}
 
         {/* Next Button */}
         <button className="player-control-button next" onClick={handleNext}>
-          <i className="fas fa-step-forward">⏭</i>
+          <i className="fas fa-step-forward"></i>
         </button>
       </div>
 

@@ -6,7 +6,9 @@ import './Player.css';
 const Player = () => {
   const { 
     currentTrack,
-    isPlaying
+    isPlaying,
+    playbackrate = 1.0,
+    handlePlaybackRateChange
   } = useAudioPlayer();
 
   // Return null if no track is selected
@@ -21,6 +23,11 @@ const Player = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const formatSpeed = (speed) => {
+    if (typeof speed !== 'number') return '1.00x';
+    return speed.toFixed(2) + 'x';
   };
 
   // Main player UI
