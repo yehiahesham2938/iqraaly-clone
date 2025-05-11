@@ -7,9 +7,7 @@ const AudiobookSchema = new mongoose.Schema({
   duration: Number,
   category: String,
   comments: String,
-  cover: String,            
-  rating: Number,             
-  reviews: Number 
+  cover: String
 }, { timestamps: true });
 
 module.exports = mongoose.model('audioBook', AudiobookSchema);

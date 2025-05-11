@@ -288,7 +288,7 @@ const BookDetails = () => {
         <div className="book-reviews">
           <h3>التقييمات والمراجعات</h3>
           <BookReview
-            bookId={book.id}
+            bookId={book._id}
             onSubmit={handleReviewSubmit}
             isAuthenticated={isAuthenticated}
           />

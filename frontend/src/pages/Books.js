@@ -15,10 +15,6 @@ const Books = () => {
     return savedMode ? JSON.parse(savedMode) : false;
   });
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [bookmarks, setBookmarks] = useState(() => {
-    const savedBookmarks = localStorage.getItem('bookmarks');
-    return savedBookmarks ? JSON.parse(savedBookmarks) : [];
-  });
   const [mostListenedBooks, setMostListenedBooks] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
 
@@ -40,10 +36,6 @@ const Books = () => {
       document.body.classList.remove('dark-mode');
     }
   }, [darkMode]);
-
-  useEffect(() => {
-    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  }, [bookmarks]);
 
   useEffect(() => {
     
@@ -79,26 +71,6 @@ const Books = () => {
     setIsAuthenticated(false);
     setUser(null);
     navigate('/');
-  };
-
-  const toggleBookmark = (book) => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
-    
-    setBookmarks(prevBookmarks => {
-      const isBookmarked = prevBookmarks.some(b => b.id === book.id);
-      if (isBookmarked) {
-        return prevBookmarks.filter(b => b.id !== book.id);
-      } else {
-        return [...prevBookmarks, book];
-      }
-    });
-  };
-
-  const isBookmarked = (bookId) => {
-    return bookmarks.some(book => book.id === bookId);
   };
 
   const renderRatingStars = (rating) => {
@@ -139,7 +111,7 @@ const Books = () => {
       if (data.success) {
         // Update the book's rating and reviews count
         const updatedBooks = mostListenedBooks.map(book => {
-          if (book.id === reviewData.bookId) {
+          if (book._id === reviewData.bookId) {
             return {
               ...book,
               rating: data.newRating,
@@ -280,8 +252,8 @@ const Books = () => {
           <h3 className="section-title">الأكثر استماعا</h3>
           <div className="books-grid">
             {(mostListenedBooks || []).map(book => (
-              <div key={book.id} className="book-card" onClick={() => handleBookClick(book)}>
-                <div className="book-cover">
+              <div key={book._id} className="book-card">
+                <div className="book-cover" onClick={() => handleBookClick(book)}>
                   <img 
                     src={getImageUrl(book.cover)} 
                     alt={book.title}
@@ -291,30 +263,13 @@ const Books = () => {
                 <div className="book-info">
                   <h4 className="book-title">{book.title}</h4>
                   <h6 className="book-author">{book.author}</h6>
-                  <div className="book-rating">
-                    <div className="stars">
-                      {renderRatingStars(book.rating)}
-                    </div>
-                    <span className="rating-value">{book.rating}</span>
-                    <span className="reviews-count">({book.reviews} تقييم)</span>
-                  </div>
                 </div>
-                <button 
-                  className={`bookmark-btn ${isBookmarked(book.id) ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleBookmark(book);
-                  }}
-                  title={isBookmarked(book.id) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
-                  style={{ position: 'static', margin: '1rem auto 0', display: 'block' }}
-                >
-                  <i className={`fas fa-bookmark ${isBookmarked(book.id) ? 'active' : ''}`}></i>
-                </button>
-                <BookReview
-                  bookId={book.id}
-                  onSubmit={handleReviewSubmit}
-                  isAuthenticated={isAuthenticated}
-                />
+                <div onClick={(e) => e.stopPropagation()}>
+                  <BookReview
+                    bookId={book._id}
+                    isAuthenticated={isAuthenticated}
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -325,8 +280,8 @@ const Books = () => {
           <h3 className="section-title">جديد اقرألي</h3>
           <div className="books-grid">
             {(newReleases || []).map(book => (
-              <div key={book.id} className="book-card" onClick={() => handleBookClick(book)}>
-                <div className="book-cover">
+              <div key={book._id} className="book-card">
+                <div className="book-cover" onClick={() => handleBookClick(book)}>
                   <img 
                     src={getImageUrl(book.cover)} 
                     alt={book.title}
@@ -336,30 +291,13 @@ const Books = () => {
                 <div className="book-info">
                   <h4 className="book-title">{book.title}</h4>
                   <h6 className="book-author">{book.author}</h6>
-                  <div className="book-rating">
-                    <div className="stars">
-                      {renderRatingStars(book.rating)}
-                    </div>
-                    <span className="rating-value">{book.rating}</span>
-                    <span className="reviews-count">({book.reviews} تقييم)</span>
-                  </div>
                 </div>
-                <button 
-                  className={`bookmark-btn ${isBookmarked(book.id) ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleBookmark(book);
-                  }}
-                  title={isBookmarked(book.id) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
-                  style={{ position: 'static', margin: '1rem auto 0', display: 'block' }}
-                >
-                  <i className={`fas fa-bookmark ${isBookmarked(book.id) ? 'active' : ''}`}></i>
-                </button>
-                <BookReview
-                  bookId={book.id}
-                  onSubmit={handleReviewSubmit}
-                  isAuthenticated={isAuthenticated}
-                />
+                <div onClick={(e) => e.stopPropagation()}>
+                  <BookReview
+                    bookId={book._id}
+                    isAuthenticated={isAuthenticated}
+                  />
+                </div>
               </div>
             ))}
           </div>

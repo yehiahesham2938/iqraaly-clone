@@ -1,117 +1,174 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './BookReview.css';
 
-const BookReview = ({ bookId, initialRating = 0, initialReview = '', onSubmit, isAuthenticated }) => {
-  const navigate = useNavigate();
-  const [rating, setRating] = useState(initialRating);
-  const [review, setReview] = useState(initialReview);
-  const [hoveredRating, setHoveredRating] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const BookReview = ({ bookId, isAuthenticated }) => {
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [userRating, setUserRating] = useState(null);
+  const [allRatings, setAllRatings] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalRatings, setTotalRatings] = useState(0);
+  const [error, setError] = useState(null);
+  const [hoverRating, setHoverRating] = useState(0);
 
-  const handleRatingClick = (value) => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
+  useEffect(() => {
+    fetchRatings();
+    if (isAuthenticated) {
+      fetchUserRating();
     }
-    setRating(value);
+  }, [bookId, isAuthenticated]);
+
+  const fetchRatings = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/ratings/${bookId}`);
+      const data = await response.json();
+      if (data.success) {
+        setAllRatings(data.ratings);
+        setAverageRating(data.averageRating);
+        setTotalRatings(data.totalRatings);
+      }
+    } catch (error) {
+      console.error('Error fetching ratings:', error);
+    }
   };
 
-  const handleRatingHover = (value) => {
-    setHoveredRating(value);
-  };
-
-  const handleRatingLeave = () => {
-    setHoveredRating(0);
+  const fetchUserRating = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/ratings/${bookId}/user`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      if (data.success && data.rating) {
+        setUserRating(data.rating);
+        setRating(data.rating.rating);
+        setComment(data.rating.comment || '');
+      }
+    } catch (error) {
+      console.error('Error fetching user rating:', error);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isAuthenticated) {
-      navigate('/login');
+      setError('Please login to submit a rating');
       return;
     }
 
-    if (!rating) {
-      alert('الرجاء اختيار تقييم');
-      return;
-    }
-
-    setIsSubmitting(true);
     try {
-      await onSubmit({
-        bookId,
-        rating,
-        review
+      const response = await fetch('http://localhost:5000/api/ratings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          audiobook_id: bookId,
+          rating,
+          comment
+        })
       });
-      setReview('');
-      setRating(0);
+
+      const data = await response.json();
+      if (data.success) {
+        setUserRating(data.rating);
+        setAverageRating(data.averageRating);
+        setTotalRatings(data.totalRatings);
+        setError(null);
+        fetchRatings();
+      } else {
+        setError(data.message);
+      }
     } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('حدث خطأ أثناء إرسال التقييم');
-    } finally {
-      setIsSubmitting(false);
+      setError('Failed to submit rating');
+      console.error('Error submitting rating:', error);
     }
   };
 
-  const renderStars = () => {
+  // Render stars for average rating (non-interactive)
+  const renderAverageStars = (value) => {
     const stars = [];
-    const displayRating = hoveredRating || rating;
-
     for (let i = 1; i <= 5; i++) {
       stars.push(
-        <button
+        <i
           key={i}
-          type="button"
-          className={`star-btn ${i <= displayRating ? 'active' : ''}`}
-          onClick={() => handleRatingClick(i)}
-          onMouseEnter={() => handleRatingHover(i)}
-          onMouseLeave={handleRatingLeave}
-          aria-label={`تقييم ${i} نجوم`}
-        >
-          <i className="fas fa-star"></i>
-        </button>
+          className={`fas fa-star ${i <= value ? 'active' : ''}`}
+        />
       );
     }
+    return stars;
+  };
 
+  // Render stars for user rating (interactive)
+  const renderUserRatingStars = () => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <i
+          key={i}
+          className={`fas fa-star ${i <= (hoverRating || rating) ? 'active' : ''} interactive`}
+          onClick={() => setRating(i)}
+          onMouseEnter={() => setHoverRating(i)}
+          onMouseLeave={() => setHoverRating(0)}
+        />
+      );
+    }
     return stars;
   };
 
   return (
     <div className="book-review">
-      <h4 className="review-title">أضف تقييمك</h4>
-      <form onSubmit={handleSubmit}>
-        <div className="rating-container">
-          <div className="stars-container">
-            {renderStars()}
-          </div>
-          <span className="rating-value">
-            {rating ? `${rating} نجوم` : 'اختر تقييمك'}
-          </span>
+      <div className="rating-summary">
+        <div className="average-rating">
+          <span className="rating-value">{averageRating}</span>
+          <div className="stars">{renderAverageStars(Math.round(averageRating))}</div>
+          <span className="total-ratings">({totalRatings} تقييم)</span>
         </div>
-        
-        <div className="review-input-container">
-          <textarea
-            className="review-input"
-            value={review}
-            onChange={(e) => setReview(e.target.value)}
-            placeholder="اكتب تقييمك هنا..."
-            rows="4"
-            maxLength="500"
-          />
-          <span className="char-count">
-            {review.length}/500
-          </span>
-        </div>
+      </div>
 
-        <button
-          type="submit"
-          className="submit-review-btn"
-          disabled={isSubmitting || !rating}
-        >
-          {isSubmitting ? 'جاري الإرسال...' : 'إرسال التقييم'}
-        </button>
-      </form>
+      {isAuthenticated ? (
+        <form onSubmit={handleSubmit} className="rating-form">
+          <div className="rating-input">
+            <label>تقييمك:</label>
+            <div className="stars user-rating-stars">
+              {renderUserRatingStars()}
+            </div>
+          </div>
+          <div className="comment-input">
+            <label>تعليقك:</label>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="اكتب تعليقك هنا..."
+              rows="3"
+            />
+          </div>
+          {error && <div className="error-message">{error}</div>}
+          <button type="submit" className="submit-button">
+            {userRating ? 'تحديث التقييم' : 'إرسال التقييم'}
+          </button>
+        </form>
+      ) : (
+        <div className="login-prompt">
+          <p>يرجى تسجيل الدخول لإضافة تقييم</p>
+        </div>
+      )}
+
+      <div className="ratings-list">
+        <h4>التقييمات الأخيرة</h4>
+        {allRatings.map((rating) => (
+          <div key={rating._id} className="rating-item">
+            <div className="rating-header">
+              <span className="username">{rating.user_id.username}</span>
+              <div className="stars">{renderAverageStars(rating.rating)}</div>
+            </div>
+            {rating.comment && <p className="comment">{rating.comment}</p>}
+            <span className="date">{new Date(rating.createdAt).toLocaleDateString('ar-SA')}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

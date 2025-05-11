@@ -29,6 +29,8 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/audiobooks', require('./routes/contentRoutes'));
 //chat route
 app.use('/api/chat', require('./routes/chatRoutes'));
+//rating route
+app.use('/api/ratings', require('./routes/ratingRoutes'));
 // mongoose.connect(db.url, db.options)
 //   .then(() => {
 //     console.log(`Connected successfully toDB:`, db.url);

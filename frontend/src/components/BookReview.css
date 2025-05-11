@@ -1,56 +1,117 @@
 .book-review {
+  margin-top: 2rem;
+  padding: 1.5rem;
   background: #fff;
   border-radius: 12px;
-  padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app.dark-mode .book-review {
+  background: #2d2d2d;
+}
+
+.rating-summary {
   margin-bottom: 2rem;
+  text-align: center;
 }
 
-.review-title {
-  font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 1rem;
-  text-align: right;
-}
-
-.rating-container {
+.average-rating {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
 }
 
-.stars-container {
+.rating-value {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.app.dark-mode .rating-value {
+  color: #fff;
+}
+
+.stars {
   display: flex;
   gap: 0.25rem;
 }
 
-.star-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font-size: 1.5rem;
+.stars i {
   color: #ddd;
-  transition: color 0.2s ease;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  -webkit-text-stroke: 1px #666;
 }
 
-.star-btn:hover,
-.star-btn.active {
+.stars i.active {
   color: #ffc107;
+  -webkit-text-stroke: 1px #ffc107;
 }
 
-.rating-value {
+/* User rating stars specific styles */
+.user-rating-stars i {
+  cursor: pointer;
+}
+
+.user-rating-stars i:hover {
+  color: #ffc107;
+  -webkit-text-stroke: 1px #ffc107;
+}
+
+.user-rating-stars i:hover ~ i {
+  color: #ddd;
+  -webkit-text-stroke: 1px #666;
+}
+
+.rating-input {
+  margin-bottom: 1rem;
+}
+
+.rating-input label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.app.dark-mode .rating-input label {
+  color: #fff;
+}
+
+.rating-input .stars {
+  margin-top: 0.5rem;
+}
+
+.total-ratings {
   color: #666;
   font-size: 0.9rem;
 }
 
-.review-input-container {
-  position: relative;
+.app.dark-mode .total-ratings {
+  color: #ccc;
+}
+
+.rating-form {
+  margin-bottom: 2rem;
+}
+
+.comment-input {
   margin-bottom: 1rem;
 }
 
-.review-input {
+.comment-input label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.app.dark-mode .comment-input label {
+  color: #fff;
+}
+
+.comment-input textarea {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
@@ -58,70 +119,115 @@
   resize: vertical;
   font-family: inherit;
   font-size: 0.9rem;
-  line-height: 1.5;
-  transition: border-color 0.2s ease;
+  color: #333;
+  background: #f8f9fa;
 }
 
-.review-input:focus {
-  outline: none;
-  border-color: #4a90e2;
-}
-
-.char-count {
-  position: absolute;
-  bottom: 0.5rem;
-  left: 0.5rem;
-  font-size: 0.8rem;
-  color: #999;
-}
-
-.submit-review-btn {
-  background: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.submit-review-btn:hover {
-  background: #357abd;
-}
-
-.submit-review-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-/* Dark mode styles */
-.app.dark-mode .book-review {
-  background: #2d2d2d;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.app.dark-mode .review-title {
-  color: #fff;
-}
-
-.app.dark-mode .rating-value {
-  color: #ccc;
-}
-
-.app.dark-mode .review-input {
+.app.dark-mode .comment-input textarea {
   background: #3d3d3d;
   border-color: #4d4d4d;
   color: #fff;
 }
 
-.app.dark-mode .review-input:focus {
-  border-color: #5a9de2;
+.submit-button {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.app.dark-mode .char-count {
+.submit-button:hover {
+  background: #357abd;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.login-prompt {
+  text-align: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.app.dark-mode .login-prompt {
+  background: #3d3d3d;
+}
+
+.login-prompt p {
+  color: #666;
+  margin: 0;
+}
+
+.app.dark-mode .login-prompt p {
+  color: #ccc;
+}
+
+.ratings-list {
+  margin-top: 2rem;
+}
+
+.ratings-list h4 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.app.dark-mode .ratings-list h4 {
+  color: #fff;
+}
+
+.rating-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.app.dark-mode .rating-item {
+  border-bottom-color: #3d3d3d;
+}
+
+.rating-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.username {
+  font-weight: 500;
+  color: #333;
+}
+
+.app.dark-mode .username {
+  color: #fff;
+}
+
+.rating-item .comment {
+  color: #666;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.app.dark-mode .rating-item .comment {
+  color: #ccc;
+}
+
+.rating-item .date {
   color: #999;
+  font-size: 0.8rem;
+}
+
+.app.dark-mode .rating-item .date {
+  color: #888;
 }
 
 /* Responsive adjustments */

@@ -117,34 +117,6 @@
   text-align: right;
 }
 
-/* Rating Styles */
-.book-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.stars {
-  display: flex;
-  gap: 2px;
-}
-
-.stars i {
-  color: #ffc107;
-  font-size: 0.9rem;
-}
-
-.rating-value {
-  font-weight: 600;
-  color: #333;
-}
-
-.reviews-count {
-  color: #666;
-  font-size: 0.85rem;
-}
-
 /* Dark mode styles */
 .app.dark-mode .section-title {
   color: #fff;
@@ -168,14 +140,6 @@
 }
 
 .dark-mode .bookmark-btn i {
-  color: #ccc;
-}
-
-.dark-mode .rating-value {
-  color: #fff;
-}
-
-.dark-mode .reviews-count {
   color: #ccc;
 }
 
