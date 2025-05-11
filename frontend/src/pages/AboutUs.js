@@ -182,18 +182,18 @@ const AboutUs = () => {
               {/* Add team members here */}
               <div className="team-member">
                 <div className="member-image"></div>
-                <h4> محمد فؤاد</h4>
-                <p> فريق المحتوى الإبداعي, كاتب ومحرر صوتي</p>
+                <h4> Yehia Hesham </h4>
+                <p> Backend Developer </p>
               </div>
               <div className="team-member">
                 <div className="member-image"></div>
-                <h4> أحمد مصطفى</h4>
-                <p>  فريق التطوير التقني, مطور برمجيات رئيسي</p>
+                <h4> Mustafa Muhhamed </h4>
+                <p> Frontend Developer </p>
               </div>
               <div className="team-member">
                 <div className="member-image"></div>
-                <h4> سارة عبد الله</h4>
-                <p>  فريق التسويق والإعلام, مسؤولة التسويق الرقمي</p>
+                <h4> Hannen El-Ghawy</h4>
+                <p>  Project Manager </p>
               </div>
             </div>
           </div>
