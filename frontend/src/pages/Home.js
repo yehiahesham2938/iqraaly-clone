@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Chatbot from '../components/Chatbot';
 import './Home.css';
 
 const Home = () => {
@@ -146,6 +147,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Chatbot */}
+      <Chatbot />
     </div>
   );
 };

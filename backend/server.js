@@ -7,13 +7,28 @@ const Audiobook = require('./models/audioBook'); // Import the Audiobook model
 const cors = require('cors');
 
 const app = express();
-app.use(express.json()); 
-app.use(cors());
- 
+
+// CORS configuration
+app.use(cors({
+  origin: 'http://localhost:3000', // Your React app's URL
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+
+app.use(express.json());
+
+// Log environment variables (remove in production)
+console.log('Environment variables loaded:', {
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY ? 'Present' : 'Missing',
+  NODE_ENV: process.env.NODE_ENV
+});
+
 //Auth route
 app.use('/api/auth', require('./routes/authRoutes'));
 //content route
 app.use('/api/audiobooks', require('./routes/contentRoutes'));
+//chat route
+app.use('/api/chat', require('./routes/chatRoutes'));
 // mongoose.connect(db.url, db.options)
 //   .then(() => {
 //     console.log(`Connected successfully toDB:`, db.url);
