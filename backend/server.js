@@ -2,49 +2,35 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const db = require('./config/db'); 
-const User = require('../backend/models/user');
-const Audiobook = require('./models/audioBook'); // Import the Audiobook model
+const User = require('./models/user');
+const Audiobook = require('./models/audioBook'); 
 const cors = require('cors');
 
 const app = express();
 
-// CORS configuration
+  
 app.use(cors({
-  origin: 'http://localhost:3000', // Your React app's URL
+  origin: 'http://localhost:3000', 
   methods: ['GET', 'POST'],
   credentials: true
 }));
 
 app.use(express.json());
 
-// Log environment variables (remove in production)
+  
 console.log('Environment variables loaded:', {
   GEMINI_API_KEY: process.env.GEMINI_API_KEY ? 'Present' : 'Missing',
   NODE_ENV: process.env.NODE_ENV
 });
 
-//Auth route
+  
 app.use('/api/auth', require('./routes/authRoutes'));
-//content route
+  
 app.use('/api/audiobooks', require('./routes/contentRoutes'));
-//chat route
+  
 app.use('/api/chat', require('./routes/chatRoutes'));
-//rating route
-app.use('/api/ratings', require('./routes/ratingRoutes'));
-// mongoose.connect(db.url, db.options)
-//   .then(() => {
-//     console.log(`Connected successfully toDB:`, db.url);
-    
-//     const User = require('./models/user');
-//     User.create({
-//       username: 'yehia',
-//       email: 'yehia@iqraaly.com',
-//       password: 'yehia'
-//     }).then(user => {
-//       console.log('yehia user created:', user.username);
-//     });
-//   })
-//   .catch(err => console.error('DB connection error:', err));
+  
+app.use('/api/ratings', require('./routes/ratingRoutes')); 
 
 mongoose.connect(db.url, db.options)
   .then(() => console.log('db connected'))

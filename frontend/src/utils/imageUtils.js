@@ -1,7 +1,7 @@
-// Base URL for images
+  
 const BASE_IMAGE_URL = process.env.REACT_APP_IMAGE_BASE_URL || 'http://localhost:5000';
 
-// Image types and their corresponding paths
+  
 const IMAGE_PATHS = {
   bookCovers: '/uploads/book-covers',
   userAvatars: '/uploads/avatars',
@@ -18,15 +18,15 @@ const IMAGE_PATHS = {
 export const getImageUrl = (imagePath, type = 'bookCovers') => {
   if (!imagePath) return null;
   
-  // If the image path is already a full URL, return it
+  
   if (imagePath.startsWith('http')) {
     return imagePath;
   }
 
-  // If the image path starts with a forward slash, remove it
+  
   const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
   
-  // Return the full URL
+  
   return `${BASE_IMAGE_URL}${IMAGE_PATHS[type]}/${cleanPath}`;
 };
 

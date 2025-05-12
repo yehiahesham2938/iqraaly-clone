@@ -19,7 +19,7 @@ const BookDetails = () => {
   const [error, setError] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  // Sample book data - Replace with API call
+  
   const sampleBook = {
     id: parseInt(id),
     title: 'هاتف وثلاث جثث - الكتاب الأول',
@@ -37,7 +37,7 @@ const BookDetails = () => {
   };
 
   useEffect(() => {
-    // Check if user is authenticated
+  
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     if (token && userData) {
@@ -56,7 +56,7 @@ const BookDetails = () => {
   }, [darkMode]);
 
   useEffect(() => {
-    // Simulate API call
+  
     setLoading(true);
     setTimeout(() => {
       setBook(sampleBook);
@@ -86,7 +86,7 @@ const BookDetails = () => {
       return;
     }
     setIsBookmarked(!isBookmarked);
-    // TODO: Implement bookmark functionality with API
+  
   };
 
   const renderRatingStars = (rating) => {
@@ -110,7 +110,7 @@ const BookDetails = () => {
 
   const handleReviewSubmit = async (reviewData) => {
     try {
-      // TODO: Implement review submission with API
+  
       console.log('Review submitted:', reviewData);
     } catch (error) {
       console.error('Error submitting review:', error);

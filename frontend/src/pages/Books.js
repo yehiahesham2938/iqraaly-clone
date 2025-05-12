@@ -109,7 +109,7 @@ const Books = () => {
 
       const data = await response.json();
       if (data.success) {
-        // Update the book's rating and reviews count
+  
         const updatedBooks = mostListenedBooks.map(book => {
           if (book._id === reviewData.bookId) {
             return {

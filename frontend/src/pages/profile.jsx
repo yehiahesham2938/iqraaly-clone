@@ -93,7 +93,7 @@ const Profile = () => {
         throw new Error('No authentication token found');
       }
 
-      // Create FormData object for file upload
+  
       const formDataToSend = new FormData();
       formDataToSend.append('username', formData.username);
       formDataToSend.append('email', formData.email);
@@ -127,7 +127,7 @@ const Profile = () => {
       setSuccessMessage('Profile updated successfully');
       setSelectedFile(null);
       
-      // Refresh the profile data
+  
       await fetchProfile();
     } catch (error) {
       console.error('Profile update error:', error);

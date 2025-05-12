@@ -17,7 +17,7 @@ const Categories = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Sample categories data - Replace with API call
+  
   const sampleCategories = [
     {
       id: 1,
@@ -50,7 +50,7 @@ const Categories = () => {
   ];
 
   useEffect(() => {
-    // Check if user is authenticated
+  
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     if (token && userData) {
@@ -69,7 +69,7 @@ const Categories = () => {
   }, [darkMode]);
 
   useEffect(() => {
-    // Simulate API call
+  
     setLoading(true);
     setTimeout(() => {
       setCategories(sampleCategories);

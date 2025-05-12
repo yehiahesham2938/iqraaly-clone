@@ -19,7 +19,7 @@ const sampleMostListenedBooks = [
   }
 ];
 
-// Fill additional required fields
+  
 const enrichedBooks = sampleMostListenedBooks.map((book, index) => ({
   title: book.title,
   author: book.author,

@@ -19,7 +19,7 @@ import Subscription from './pages/Subscription';
 
 import './App.css';
 
-// Protected Route component
+  
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = !!localStorage.getItem('token');
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -35,7 +35,7 @@ function App() {
   });
 
   useEffect(() => {
-    // Check if user is authenticated
+  
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     if (token && userData) {

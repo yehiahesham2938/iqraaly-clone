@@ -7,7 +7,7 @@ import './AudioInfo.css';
 const AudioInfo = ({ track }) => {
   const { loadTrack, currenttrack } = useAudioPlayer();
 
-  // Use the current track if available, otherwise use the passed track
+  
   const displayTrack = currenttrack || track;
 
   if (!displayTrack) {

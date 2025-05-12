@@ -20,20 +20,20 @@ exports.addRating = async (request, response) => {
     const { audiobook_id, rating, comment } = request.body;
     const user_id = request.user._id;
 
-    // Check if audiobook exists
+  
     const audiobook = await Audiobook.findById(audiobook_id);
     if (!audiobook) {
       return handleError(response, 404, 'Audiobook not found');
     }
 
-    // Create or update rating
+  
     const ratingData = await AudioBookRating.findOneAndUpdate(
       { audiobook_id, user_id },
       { rating, comment },
       { upsert: true, new: true }
     );
 
-    // Calculate average rating
+  
     const ratings = await AudioBookRating.find({ audiobook_id });
     const averageRating = ratings.reduce((acc, curr) => acc + curr.rating, 0) / ratings.length;
 

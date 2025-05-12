@@ -87,7 +87,7 @@ const BookReview = ({ bookId, isAuthenticated }) => {
     }
   };
 
-  // Render stars for average rating (non-interactive)
+  
   const renderAverageStars = (value) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -101,7 +101,7 @@ const BookReview = ({ bookId, isAuthenticated }) => {
     return stars;
   };
 
-  // Render stars for user rating (interactive)
+  
   const renderUserRatingStars = () => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {

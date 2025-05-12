@@ -13,7 +13,7 @@ const AboutUs = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
-    // Check if user is authenticated
+  
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     if (token && userData) {

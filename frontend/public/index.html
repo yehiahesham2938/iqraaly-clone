@@ -32,13 +32,13 @@
     <!-- Dark mode detection -->
     <script>
       (function() {
-        // Check if user has a preferred color scheme
+  
         const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        // Check localStorage first
+  
         const savedMode = localStorage.getItem('darkMode');
         
-        // Apply dark mode if it's saved in localStorage or if user prefers dark mode
+  
         if (savedMode === 'true' || (savedMode === null && userPrefersDark)) {
           document.documentElement.classList.add('dark-mode');
           document.body.classList.add('dark-mode');

@@ -65,9 +65,9 @@ const Register = () => {
         throw new Error(data.message || 'Registration failed');
       }
 
-      // Handle successful registration
+  
       console.log('Registration successful:', data);
-      // You can redirect to login page or show success message
+  
       window.location.href = '/login';
     } catch (error) {
       setErrorMessage(error.message);

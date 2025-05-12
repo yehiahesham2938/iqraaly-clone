@@ -2,15 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Check if API key is available
+  
 if (!process.env.GEMINI_API_KEY) {
   console.error('GEMINI_API_KEY is not set in environment variables');
 }
 
-// Initialize Gemini API
+  
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Chat endpoint
+  
 router.post('/', async (req, res) => {
   try {
     const { message } = req.body;
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-      // Create the prompt
+  
       const prompt = `You are an AI assistant for an Arabic audiobook platform called Iqraaly. 
       You can help users with book summaries, recommendations, and answering questions about books. 
       Please respond in Arabic. Keep your responses concise and helpful.
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
 
       console.log('Sending prompt to Gemini API:', prompt);
 
-      // Generate content using Gemini 2.5 Flash Preview
+  
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-04-17" });
       console.log('Model initialized');
 
@@ -84,7 +84,7 @@ router.post('/', async (req, res) => {
       code: error.code
     });
     
-    // Send appropriate error message based on the error type
+  
     let errorMessage = 'عذراً، حدث خطأ في معالجة طلبك. يرجى المحاولة مرة أخرى.';
     
     if (error.message.includes('API key')) {

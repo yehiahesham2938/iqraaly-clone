@@ -24,7 +24,7 @@ const Player = () => {
     bufferProgress
   } = useAudioPlayer();
 
-  // Return null if no track is selected
+  
   if (!currentTrack) {
     return null;
   }

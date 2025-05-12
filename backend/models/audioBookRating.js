@@ -23,7 +23,7 @@ const AudioBookRatingSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// Create a compound index to ensure a user can only rate an audiobook once
+  
 AudioBookRatingSchema.index({ audiobook_id: 1, user_id: 1 }, { unique: true });
 
 module.exports = mongoose.model('audioBookRating', AudioBookRatingSchema); 

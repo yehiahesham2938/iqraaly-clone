@@ -28,11 +28,11 @@ function Login() {
         throw new Error(data.message || 'Login failed');
       }
 
-      // Store the token in localStorage
+  
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      // Redirect to home page or dashboard
+  
       window.location.href = '/';
     } catch (error) {
       setErrorMessage(error.message || 'Invalid email or password');
